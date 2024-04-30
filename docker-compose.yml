@@ -1,0 +1,32 @@
+version: '0.1'
+
+services:
+  db:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - user-coordinate-data:/data/db
+    networks:
+      - pathage-net
+
+  server:
+    image: flask-app:latest
+    container_name: server
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "5000:5000"
+    networks:
+      - pathage-net
+    depends_on:
+      - db
+
+volumes:
+  user-coordinate-data:
+  
+networks:
+  pathage-net:
+    driver: bridge

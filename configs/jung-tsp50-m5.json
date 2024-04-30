@@ -1,0 +1,17 @@
+{
+    "model_name": "jung-tsp50-m5",
+    "full_name": "Lightweight CNN-Transformer for TSP (Jung et al., 2023) - Trained on TSP50, segment length 5",
+    "description": "A lightweight model that combines a CNN with a Transformer for the TSP task. The model uses a CNN to extract features from the input graph and a Transformer to solve the TSP task. The model is based on the TSP Transformer model proposed by Bresson et al. (2021). The model only attends to the recently visited nodes in the decoding process, which makes it not only more efficient and scalable to larger graphs but also more performant than the original TSP Transformer model. The model is trained on TSP50 with a segment length of 5.",
+    "config": {
+        "embedding": "conv",
+        "batchnorm": true,
+        "nb_neighbors": 10,
+        "kernel_size": 11,
+        "dim_emb": 128,
+        "dim_ff": 512,
+        "nb_layers_encoder": 6,
+        "nb_layers_decoder": 2,
+        "nb_heads": 8,
+        "segm_len": 5
+    }
+}
