@@ -1,11 +1,11 @@
 import torch
-from jung import Jung
+from inference.jung import Jung
 
 MODEL_DICT = {
     'jung-tsp50-m5': {
         'instance': Jung('conv', 10, 11, 2, 128, 512, 6, 2, 8, 1000, 5, True),
-        'weights': 'weights/jung-tsp50-m5.pth',
-        'forward': lambda model, x: model.forward(x, 0, True, False)[0]
+        'weights': 'weights/jung-tsp50-m5.pt',
+        'forward': lambda model, x: model.forward(x, 0, True, False)[0],
     }
 }
 
@@ -22,7 +22,7 @@ class Inferencer:
         self.model.eval()
         with torch.no_grad():
             coordinates = torch.Tensor(coordinates).to(self.device)
-            output = self.forward(self.model, coordinates)
+            output = self.forward(self.model, coordinates[None])
             return output
             # return 'Inference done'
         

@@ -1,4 +1,4 @@
-version: '0.1'
+version: '3.7'
 
 services:
   db:
@@ -12,7 +12,7 @@ services:
       - pathage-net
 
   server:
-    image: flask-app:latest
+    image: pathage-server
     container_name: server
     build: .
     volumes:
@@ -23,6 +23,12 @@ services:
       - pathage-net
     depends_on:
       - db
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
 
 volumes:
   user-coordinate-data:

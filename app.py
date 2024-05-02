@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, session, redirect
-import pymongo, os, uuid
-import logging, json
+import pymongo, os, uuid, logging, json
+import pandas as pd
 
 from inference.inference import Inferencer
 
@@ -43,7 +43,7 @@ def process_option():
     data = request.get_json()
     model_name = data['model_name']
     config = json.load(open(f'configs/{model_name}.json'))
-    app.logger.debug(config)
+    # app.logger.debug(config)
     return jsonify(config)
     # return jsonify({'message': 'Config file loaded successfully'})
 
@@ -61,12 +61,7 @@ def inference():
     
 
 def read_coordinates(file):
-    coordinates = []
-    for line in file:
-        line = line.decode('utf-8').strip()
-        if line:
-            coordinates.append(line.split(','))
-    return coordinates
+    return pd.read_csv(file).to_numpy()  # only supports .csv for now
 
 
 if __name__ == '__main__':
