@@ -49,7 +49,6 @@ def process_option():
 
 @app.route('/inference', methods=['POST'])
 def inference():
-
     file = request.files['file']
     model_name = request.form['model_name']
     coordinates = read_coordinates(file)
