@@ -5,49 +5,63 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
-    <title>Render Templates Example</title>
+    <title>Pathage - Online TSP Solver</title>
 </head>
 
 <body>
-    <div>
-    <h1>Please input coordinate file (.csv)</h1>
-    <p>The coordinate file should follow the following format:<br>
-        x,y<br>
-        x1,y1<br>
-        x2,y2<br>
-        x3,y3<br>
-        ...<br>
-        xn,yn<br>
-    </p>
-</div>
-<div>
-    <form id="uploadForm" method="post" enctype="multipart/form-data">
-        <input id='fileInput' type="file" name="file" accept=".csv">
-    </form>
-</div>
-<div>
-    <h1>Inference model configuration</h1>
-    <p>Choose the model you want to use for inference</p>
-    <select id="modelSelect" onchange="sendOption(this.value)">
-        <option value="">--Select Model--</option>
-        <option value="jung-tsp50-m5">Jung-TSP50-m5</option>
-        <option value="bresson-tsp50">Bresson</option>
-        <option value="yang">Yang</option>
-    </select>
-    <div id="modelDisplay">
-        <div id="modelDisplayName"><b>- Model Name: </b></div>
-        <div id="modelDisplayDesc"><b>- Model Description: </b></div>
-        <div id="modelDisplayConfigs"><b>- Model configurations: </b><br></div>
+<div class="container">
+    <div class="box">
+        <h1>Please input coordinate file (.csv)</h1>
+        <p>The coordinate file should follow the following format:<br>
+            x,y<br>
+            x1,y1<br>
+            x2,y2<br>
+            x3,y3<br>
+            ...<br>
+            xn,yn<br>
+        </p>
+        <form id="uploadForm" method="post" enctype="multipart/form-data">
+            <input onchange="onFileSelected()" id='fileInput' type="file" name="file" accept=".csv">
+        </form>
     </div>
-    <div id="configContainer"></div>
+    <div class="box" id="fileContentDisplay">
+        Hello
+    </div>  
 </div>
-<button onclick="inference()">Inference</button>
-<div>
-    <h1>Result tour</h1>
-    <div id="resultTourDisplay">The resulting tour from the model will be shown here.</div>
-    <img id="resultTourPlotDisplay"></div>
+<div class="container">
+    <div class="box">
+        <h1>Inference model configuration</h1>
+        <p>Choose the model you want to use for inference</p>
+        <select id="modelSelect" onchange="sendOption(this.value)">
+            <option value="">--Select Model--</option>
+            <option value="jung-tsp50-m5">Jung-TSP50-m5</option>
+            <option value="bresson-tsp50">Bresson</option>
+            <option value="yang">Yang</option>
+        </select>
+        <div id="modelDisplay">
+            <div id="modelDisplayName"><b>- Model Name: </b></div>
+            <div id="modelDisplayDesc"><b>- Model Description: </b></div>
+            <div id="modelDisplayConfigs"><b>- Model configurations: </b><br></div>
+        </div>
+        <div id="configContainer"></div>
+    </div>
+    <div class="box">
+        <button onclick="inference()">Inference</button>
+    </div>
 </div>
+<div class="container">
+    <div class="box">
+        <h1>Result tour</h1>
+        <div id="resultTourDisplay">The resulting tour from the model will be shown here.</div>
+    </div>
+    <div class="box">
+        <h1>Plot of the tour</h1>
+        <img id="resultTourPlotDisplay">
+    </div>  
+</div>
+
 </body>
 
 </html>

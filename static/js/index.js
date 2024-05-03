@@ -1,3 +1,25 @@
+function onFileSelected() {
+    const file = document.getElementById('fileInput').files[0];
+    if (!file) {
+        return;
+    }
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var contents = e.target.result;
+        var lines = contents.split('\n');  // 줄바꿈 문자로 분리
+        var output = document.getElementById('fileContentDisplay');
+        output.innerHTML = 'index: x,y<br>';  // 기존 내용 초기화
+    
+        lines.forEach(function(line, index) {
+            if (index > 0 && line != '') {
+                output.innerHTML += `${index}: ${line}<br>`;
+            }
+        });
+    };
+    reader.readAsText(file);
+}
+
 function sendOption(model_name) {
 
     fetch('/request-config', {
