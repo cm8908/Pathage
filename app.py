@@ -1,6 +1,9 @@
+import base64
+import io
 from flask import Flask, render_template, request, jsonify, session, redirect
 import pymongo, os, uuid, logging, json
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from inference.inference import Inferencer
 
@@ -54,11 +57,28 @@ def inference():
     coordinates = read_coordinates(file)
     inferencer = Inferencer(model_name)
     result_tour = inferencer.inference(coordinates)
-    app.logger.debug(result_tour)
-    # request.coordinate
-    # request.model_name
-    return 'Inference done'
-    
+    sorted_coordinates = coordinates[result_tour.astype(int)]
+    plot_url = draw_tour(sorted_coordinates)
+    return jsonify({
+        'tour': result_tour.tolist(),
+        'sorted_x': sorted_coordinates[:, 0].tolist(),
+        'sorted_y': sorted_coordinates[:, 1].tolist(),
+        'plot_url': plot_url
+    })
+
+def draw_tour(coordinates):
+    plt.scatter(coordinates[:,0], coordinates[:,1], color='red')
+    for i in range(len(coordinates)-1):
+        xs = [coordinates[i][0], coordinates[i+1][0]]
+        ys = [coordinates[i][1], coordinates[i+1][1]]
+        plt.plot(xs, ys, color='black')
+    plt.plot([coordinates[-1][0], coordinates[0][0]], [coordinates[-1][1], coordinates[0][1]], color='black')
+    plt.title(f'Result tour for {len(coordinates)} cities')
+    img = io.BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plot_url = base64.b64encode(img.getvalue()).decode()
+    return plot_url
 
 def read_coordinates(file):
     return pd.read_csv(file).to_numpy()  # only supports .csv for now

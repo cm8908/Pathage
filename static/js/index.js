@@ -48,5 +48,24 @@ function inference() {
         method: 'POST',
         body: formData
     })
-    
+    .then(response => response.json())
+    .then(data => {
+        displayResultTour(data);
+        drawResultTour(data.plot_url);
+    })
+}
+
+function displayResultTour(data) {
+    var container = document.getElementById('resultTourDisplay');
+    let content = 'x, y<br>';
+
+    for (let i=0; i < data.tour.length; i++) {
+        content += `${data.tour[i]}: ${data.sorted_x[i]}, ${data.sorted_y[i]}<br>`;
+    }
+    container.innerHTML = content;
+}
+
+function drawResultTour(plot_url) {
+    var container = document.getElementById('resultTourPlotDisplay');
+    container.src = "data:image/png;base64," + plot_url;
 }

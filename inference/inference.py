@@ -23,6 +23,6 @@ class Inferencer:
         with torch.no_grad():
             coordinates = torch.Tensor(coordinates).to(self.device)
             output = self.forward(self.model, coordinates[None])
-            return output
+            return output.cpu().numpy()[0]
             # return 'Inference done'
         
