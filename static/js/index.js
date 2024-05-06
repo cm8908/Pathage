@@ -18,6 +18,18 @@ function onFileSelected() {
         });
     };
     reader.readAsText(file);
+    drawInputCoordinates(file);
+}
+
+function drawInputCoordinates(file) {
+    var formData = new FormData();
+    formData.append('file', file);
+    fetch('/draw-coordinates', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => displayPlot(data.plot_url, 'coordinatesPlotDisplay'))
 }
 
 function sendOption(model_name) {
@@ -73,7 +85,7 @@ function inference() {
     .then(response => response.json())
     .then(data => {
         displayResultTour(data);
-        drawResultTour(data.plot_url);
+        displayPlot(data.plot_url, 'resultTourPlotDisplay');
     })
 }
 
@@ -87,7 +99,7 @@ function displayResultTour(data) {
     container.innerHTML = content;
 }
 
-function drawResultTour(plot_url) {
-    var container = document.getElementById('resultTourPlotDisplay');
+function displayPlot(plot_url, container_id) {
+    var container = document.getElementById(container_id);
     container.src = "data:image/png;base64," + plot_url;
 }

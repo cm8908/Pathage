@@ -22,21 +22,17 @@ collection = db['coordinates']
 def index():
     return render_template('index.html')
 
-# @app.route('/upload', methods=['POST'])
-# def upload():
-#     app.logger.debug('Uploading file')
-#     if 'file' not in request.files:
-#         return redirect('/')
-#     file = request.files['file']
-#     if file and not allowed_file(file.filename):
-#         app.logger.debug('File is allowed')
-#         return redirect('/')
-#     user_id = session.get('user_id', SESS_ID)        
-#     file.save(os.path.join(app.config['UPLOAD_FOLDER'], f'{user_id}_input_coordinates.csv'))
-#     # collection.insert_one({'coordinates': coordinates})
-#     # inference(coordinates)
-
-#     return redirect('/')
+@app.route('/draw-coordinates', methods=['POST'])
+def draw_coordinates():
+    print(request.files)
+    coordinates = read_coordinates(request.files['file'])
+    plt.scatter(coordinates[:,0], coordinates[:,1], color='red')
+    plt.title(f'Input coordinates for {len(coordinates)} cities')
+    img = io.BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plot_url = base64.b64encode(img.getvalue()).decode()
+    return jsonify({'plot_url': plot_url})
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['csv']
