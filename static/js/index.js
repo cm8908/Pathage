@@ -13,7 +13,10 @@ function onFileSelected() {
     
         lines.forEach(function(line, index) {
             if (index > 0 && line != '') {
-                output.innerHTML += `${index}: ${line}<br>`;
+                let xy = line.split(',')
+                let x = parseFloat(xy[0]);
+                let y = parseFloat(xy[1]);
+                output.innerHTML += `<b>${index}</b>: (${x.toFixed(3)}, ${y.toFixed(3)})\t`;
             }
         });
     };
@@ -94,7 +97,7 @@ function displayResultTour(data) {
     let content = 'x, y<br>';
 
     for (let i=0; i < data.tour.length; i++) {
-        content += `${data.tour[i]}: ${data.sorted_x[i]}, ${data.sorted_y[i]}<br>`;
+        content += `<b>${data.tour[i]}</b>: (${data.sorted_x[i].toFixed(3)}, ${data.sorted_y[i].toFixed(3)})\t`;
     }
     container.innerHTML = content;
 }
