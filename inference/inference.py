@@ -19,10 +19,18 @@ class Inferencer:
         self.forward = MODEL_DICT[model_name]['forward']
 
     def inference(self, coordinates):
+        def normalize(coordinates):
+            if coordinates.max() > 1 or coordinates.min() < 0:
+                coordinates = (coordinates - coordinates.min()) / (coordinates.max() - coordinates.min())
+            return coordinates
         self.model.eval()
         with torch.no_grad():
             coordinates = torch.Tensor(coordinates).to(self.device)
+            coordinates = normalize(coordinates)
             output = self.forward(self.model, coordinates[None])
             return output.cpu().numpy()[0]
             # return 'Inference done'
+    
+    
+        
         
