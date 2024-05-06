@@ -26,11 +26,14 @@ def index():
 def draw_coordinates():
     print(request.files)
     coordinates = read_coordinates(request.files['file'])
+    plt.figure()
     plt.scatter(coordinates[:,0], coordinates[:,1], color='red')
     plt.title(f'Input coordinates for {len(coordinates)} cities')
+    
     img = io.BytesIO()
     plt.savefig(img, format='png')
     img.seek(0)
+    plt.close()
     plot_url = base64.b64encode(img.getvalue()).decode()
     return jsonify({'plot_url': plot_url})
 
@@ -63,6 +66,7 @@ def inference():
     })
 
 def draw_tour(coordinates):
+    plt.figure()
     plt.scatter(coordinates[:,0], coordinates[:,1], color='red')
     for i in range(len(coordinates)-1):
         xs = [coordinates[i][0], coordinates[i+1][0]]
@@ -73,6 +77,7 @@ def draw_tour(coordinates):
     img = io.BytesIO()
     plt.savefig(img, format='png')
     img.seek(0)
+    plt.close()
     plot_url = base64.b64encode(img.getvalue()).decode()
     return plot_url
 
