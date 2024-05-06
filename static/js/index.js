@@ -94,7 +94,7 @@ function inference() {
 
 function displayResultTour(data) {
     var container = document.getElementById('resultTourDisplay');
-    let content = 'x, y<br>';
+    let content = 'x, y (The sorted coordinates will be display)<br>';
 
     for (let i=0; i < data.tour.length; i++) {
         content += `<b>${data.tour[i]}</b>: (${data.sorted_x[i].toFixed(3)}, ${data.sorted_y[i].toFixed(3)})\t`;
