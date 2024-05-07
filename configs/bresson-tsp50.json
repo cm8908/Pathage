@@ -1,6 +1,6 @@
 {
-    "model_name": "bresson-tsp50-m5",
-    "full_name": "TSP Transformer - Trained on 50",
+    "model_name": "bresson-tsp50",
+    "full_name": "TSP Transformer (Bresson et al. 2021) - Trained on 50",
     "description": "A Transformer based model for the Travelling Salesman Problem. It is based on the encoder-decoder architecture of the original Transformer model. The model is trained on 50 cities.",
     "config": {
         "batchnorm": true,
