@@ -58,14 +58,17 @@ function createOptionMenu(data) {
     const model_full_name = document.createElement('label');
     model_full_name.textContent = data.full_name;
     var container = document.getElementById('modelDisplayName')
+    container.innerHTML = '<b>- Model Name: </b>';
     container.appendChild(model_full_name);
 
     const model_description = document.createElement('label');
     model_description.textContent = data.description;
     var container = document.getElementById('modelDisplayDesc');
+    container.innerHTML = '<b>- Model Description: </b>';
     container.appendChild(model_description);
 
     var container = document.getElementById('modelDisplayConfigs');
+    container.innerHTML = '<b>- Model configurations: </b><br>';
     for (const key in data.config) {
         if (data.config.hasOwnProperty(key)) {
             const label = document.createElement('label');
@@ -106,3 +109,21 @@ function displayPlot(plot_url, container_id) {
     var container = document.getElementById(container_id);
     container.src = "data:image/png;base64," + plot_url;
 }
+
+function makeModelSelectOptions() {
+    fetch('/model-options', {
+        method: 'POST',
+    })
+    .then(response => response.json())
+    .then(data => {
+        var select = document.getElementById('modelSelect');
+        for (const model of data.model_options) {
+            var option = document.createElement('option');
+            option.value = model;
+            option.text = model;
+            select.appendChild(option);
+        }
+    })
+}
+
+window.onload = makeModelSelectOptions;
