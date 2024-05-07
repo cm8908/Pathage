@@ -1,13 +1,5 @@
 import torch
-from inference.jung import Jung
-
-MODEL_DICT = {
-    'jung-tsp50-m5': {
-        'instance': Jung('conv', 10, 11, 2, 128, 512, 6, 2, 8, 1000, 5, True),
-        'weights': 'weights/jung-tsp50-m5.pt',
-        'forward': lambda model, x: model.forward(x, 0, True, False)[0],
-    }
-}
+from inference import MODEL_DICT
 
 class Inferencer:
     def __init__(self, model_name):
