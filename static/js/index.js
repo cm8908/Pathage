@@ -84,9 +84,20 @@ function createOptionMenu(data) {
 }
 
 function inference() {
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput.files.length == 0) {
+        alert('Please select a file');
+        return;
+    }
+    const modelSelect = document.getElementById('modelSelect');
+    if (modelSelect.value == '') {
+        alert('Please select a model');
+        return;
+    }
+
     var formData = new FormData();
-    formData.append('file', document.getElementById('fileInput').files[0]);
-    formData.append('model_name', document.getElementById('modelSelect').value);
+    formData.append('file', fileInput.files[0]);
+    formData.append('model_name', modelSelect.value);
     formData.append('config', 'Hello world!'); // TODO: implement getConfig()
     fetch('/inference', {
         method: 'POST',
