@@ -32,7 +32,11 @@ function drawInputCoordinates(file) {
         body: formData
     })
     .then(response => response.json())
-    .then(data => displayPlot(data.plot_url, 'coordinatesPlotDisplay'))
+    .then(data => {
+        var graph = JSON.parse(data.graph);
+        Plotly.newPlot('coordinatesPlotDisplay', graph.data, graph.layout);
+    });
+    // .then(data => displayPlot(data.plot_url, 'coordinatesPlotDisplay'))
 }
 
 function sendOption(model_name) {
@@ -91,7 +95,9 @@ function inference() {
     .then(response => response.json())
     .then(data => {
         displayResultTour(data);
-        displayPlot(data.plot_url, 'resultTourPlotDisplay');
+        var graph = JSON.parse(data.graph);
+        Plotly.newPlot('resultTourPlotDisplay', graph.data, graph.layout);
+        // displayPlot(data.plot_url, 'resultTourPlotDisplay');
     })
 }
 
@@ -118,6 +124,9 @@ function makeModelSelectOptions() {
     .then(data => {
         var select = document.getElementById('modelSelect');
         for (const model of data.model_options) {
+            if (model == 'bresson-tsp100') {  // FIXME: bresson-tsp100 key matching failure
+                continue;
+            }
             var option = document.createElement('option');
             option.value = model;
             option.text = model;

@@ -2,8 +2,9 @@ import base64
 import io
 from flask import Flask, render_template, request, jsonify, session, redirect
 import pymongo, os, uuid, logging, json
-import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.graph_objs as go
+import plotly
 
 from inference import Inferencer
 from utils import *
@@ -25,18 +26,22 @@ def index():
 
 @app.route('/draw-coordinates', methods=['POST'])
 def draw_coordinates():
-    print(request.files)
     coordinates = read_coordinates(request.files['file'])
-    plt.figure()
-    plt.scatter(coordinates[:,0], coordinates[:,1], color='red')
-    plt.title(f'Input coordinates for {len(coordinates)} cities')
+    fig = go.Figure(data=go.Scatter(x=coordinates[:,0], y=coordinates[:,1], mode='markers',
+                                    marker=dict(size=10, color='red')),
+                    layout=go.Layout(title=f'Input coordinates for {len(coordinates)} cities'))
+    graph_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return jsonify({'graph': graph_json})
+    # plt.figure()
+    # plt.scatter(coordinates[:,0], coordinates[:,1], color='red')
+    # plt.title(f'Input coordinates for {len(coordinates)} cities')
     
-    img = io.BytesIO()
-    plt.savefig(img, format='png')
-    img.seek(0)
-    plt.close()
-    plot_url = base64.b64encode(img.getvalue()).decode()
-    return jsonify({'plot_url': plot_url})
+    # img = io.BytesIO()
+    # plt.savefig(img, format='png')
+    # img.seek(0)
+    # plt.close()
+    # plot_url = base64.b64encode(img.getvalue()).decode()
+    # return jsonify({'plot_url': plot_url})
 
 
 @app.route('/request-config', methods=['POST'])
@@ -56,12 +61,12 @@ def inference():
     inferencer = Inferencer(model_name)
     result_tour = inferencer.inference(coordinates)
     sorted_coordinates = coordinates[result_tour.astype(int)]
-    plot_url = draw_tour(sorted_coordinates)
+    graph_json = draw_tour(sorted_coordinates)
     return jsonify({
         'tour': result_tour.tolist(),
         'sorted_x': sorted_coordinates[:, 0].tolist(),
         'sorted_y': sorted_coordinates[:, 1].tolist(),
-        'plot_url': plot_url
+        'graph': graph_json
     })
 
 
