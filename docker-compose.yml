@@ -1,15 +1,15 @@
 version: '3.7'
 
 services:
-  db:
-    image: mongo:latest
-    container_name: mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - user-coordinate-data:/data/db
-    networks:
-      - pathage-net
+  # db:
+  #   image: mongo:latest
+  #   container_name: mongo
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - user-coordinate-data:/data/db
+  #   networks:
+  #     - pathage-net
 
   server:
     image: pathage-server
@@ -21,8 +21,8 @@ services:
       - "5000:5000"
     networks:
       - pathage-net
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
     deploy:
       resources:
         reservations:
