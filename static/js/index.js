@@ -83,6 +83,16 @@ function createOptionMenu(data) {
     }
 }
 
+// 로딩 화면을 표시하는 함수
+function showLoading() {
+    document.getElementById('overlay').style.display = 'flex';  // 오버레이 보이기
+}
+
+// 로딩 화면을 숨기는 함수
+function hideLoading() {
+    document.getElementById('overlay').style.display = 'none';  // 오버레이 숨기기
+}
+
 function inference() {
     const fileInput = document.getElementById('fileInput');
     if (fileInput.files.length == 0) {
@@ -95,6 +105,8 @@ function inference() {
         return;
     }
 
+    showLoading();
+
     var formData = new FormData();
     formData.append('file', fileInput.files[0]);
     formData.append('model_name', modelSelect.value);
@@ -105,6 +117,7 @@ function inference() {
     })
     .then(response => response.json())
     .then(data => {
+        hideLoading();
         displayResultTour(data);
         var graph = JSON.parse(data.graph);
         Plotly.newPlot('resultTourPlotDisplay', graph.data, graph.layout);
@@ -146,4 +159,9 @@ function makeModelSelectOptions() {
     })
 }
 
-window.onload = makeModelSelectOptions;
+document.addEventListener('DOMContentLoaded', function() {
+    makeModelSelectOptions();
+    hideLoading();
+});
+// window.onload = makeModelSelectOptions;
+// window.onload = hideLoading;
