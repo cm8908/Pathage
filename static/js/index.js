@@ -1,3 +1,8 @@
+let globalCoordinates = {'x': [], 'y': []};
+function resetGlobalCoordinates() {
+    globalCoordinates = {'x': [], 'y': []};
+}
+
 function changeInputTypeDisplay() {
     const inputType = document.getElementById('inputTypeSelect').value;
     if (inputType == 'inputTypeFile') {
@@ -14,12 +19,23 @@ function changeInputTypeDisplay() {
     }
 }
 
+function formatCoord(num) {
+    num = parseFloat(num);
+    if (Number.isInteger(num)) {
+        return parseInt(num);
+    }
+    else {
+        return num.toFixed(3);
+    }
+}
 function onFileSelected() {
     const file = document.getElementById('fileInput').files[0];
     if (!file) {
         return;
     }
 
+    let xs = [];
+    let ys = [];
     var reader = new FileReader();
     reader.onload = function(e) {
         var contents = e.target.result;
@@ -30,29 +46,22 @@ function onFileSelected() {
         lines.forEach(function(line, index) {
             if (index > 0 && line != '') {
                 let xy = line.split(',')
-                let x = parseFloat(xy[0]);
-                let y = parseFloat(xy[1]);
-                output.innerHTML += `<b>${index}</b>: (${x.toFixed(3)}, ${y.toFixed(3)})\t`;
+                let x = formatCoord(xy[0]);
+                let y = formatCoord(xy[1]);
+                output.innerHTML += `<b>${index}</b>: (${x}, ${y})\t`;
+                
+                x = parseFloat(xy[0]);
+                y = parseFloat(xy[1]);
+                xs.push(x);
+                ys.push(y);
             }
         });
+        resetGlobalCoordinates();
+        globalCoordinates.x = xs;
+        globalCoordinates.y = ys;
+        drawInputCoordinates();
     };
     reader.readAsText(file);
-    drawInputCoordinates(file);
-}
-
-function validateAndDisplay() {
-    // Get the input value
-    const inputField = document.getElementById("restricted-input");
-    let value = inputField.value;
-
-    // Replace any character that isn't a number, parentheses, comma, or punctuation
-    const validatedValue = value.replace(/[^0-9(),.]/g, '');
-
-    // Update the input field with the validated value
-    inputField.value = validatedValue;
-
-    // Display the validated value in the target div
-    document.getElementById("display-div").innerText = validatedValue;
 }
 
 function onTextTyped() {
@@ -65,52 +74,35 @@ function onTextTyped() {
     validatedValue = validatedValue.replace(/\s+/g, '');
     validatedValue = validatedValue.replace(/[()]/g, '');
 
-
     splitValues = validatedValue.split(',');
-    let targetValue = '';
+    let xs = []; let ys = [];
+    let targetValue = 'index: x,y<br>';
     for (let i=0; i<splitValues.length; i++) {
         if (splitValues[i] == '') {
             continue;
         }
         if (i % 2 == 0) {
-            targetValue += `<b>${i/2}</b>: (${splitValues[i]}, `;
+            let x = formatCoord(splitValues[i]);
+            targetValue += `<b>${i/2+1}</b>: (${x}, `;
+
+            x = parseFloat(splitValues[i]);
+            xs.push(x);
         }
         else {
-            targetValue += `${splitValues[i]})\t`;
+            let y = formatCoord(splitValues[i]);
+            targetValue += `${y})\t`;
+
+            y = parseFloat(splitValues[i]);
+            ys.push(y);
         }
     }
+    // TODO: error case: trailing commas (e.g. 1,2,2,2,,3)
     document.getElementById('fileContentDisplay').innerHTML = targetValue;
-
-    //     if (num != '') {
-    //         alert();
-    //         let x = parseFloat(xy.split('.')[0]);
-    //         let y = parseFloat(xy.split('.')[1]);
-    //         document.getElementById('fileContentDisplay').innerText = xy;
-    // //         document.getElementById('fileContentDisplay').innerText += `<b>${index}</b>: (${x.toFixed(3)}, ${y.toFixed(3)})\t`;
-    //     }
-    // })
-    // document.getElementById('fileContentDisplay').innerText = validatedValue;
-
-
-
-    // var reader = new FileReader();
-    // reader.onload = function(e) {
-    //     var contents = e.target.result;
-    //     var lines = contents.split('\n');  // 줄바꿈 문자로 분리
-    //     var output = document.getElementById('fileContentDisplay');
-    //     output.innerHTML = 'index: x,y<br>';  // 기존 내용 초기화
     
-    //     lines.forEach(function(line, index) {
-    //         if (index > 0 && line != '') {
-    //             let xy = line.split(',')
-    //             let x = parseFloat(xy[0]);
-    //             let y = parseFloat(xy[1]);
-    //             output.innerHTML += `<b>${index}</b>: (${x.toFixed(3)}, ${y.toFixed(3)})\t`;
-    //         }
-    //     });
-    // };
-    // reader.readAsText(file);
-    // drawInputCoordinates(file);
+    resetGlobalCoordinates();
+    globalCoordinates.x = xs;
+    globalCoordinates.y = ys;
+    drawInputCoordinates();
 }
 
 function preventEnterKey(event) {
@@ -119,9 +111,9 @@ function preventEnterKey(event) {
     }
 }
 
-function drawInputCoordinates(file) {
+function drawInputCoordinates() {
     var formData = new FormData();
-    formData.append('file', file);
+    formData.append('coordinates', JSON.stringify(globalCoordinates));
     fetch('/draw-coordinates', {
         method: 'POST',
         body: formData
@@ -189,17 +181,7 @@ function hideLoading() {
 }
 
 function inference() {
-    function inferenceFromFile() {
-        const fileInput = document.getElementById('fileInput');
-        if (fileInput.files.length == 0) {
-            alert('Please select a file');
-            return;
-        }        
-    }
 
-    function inferenceFromText() {
-
-    }
     const inputType = document.getElementById('inputTypeSelect').value;
     if (inputType == 'inputTypeFile') {
         const fileInput = document.getElementById('fileInput');
@@ -207,19 +189,14 @@ function inference() {
             alert('Please select a file');
             return;
         }      
-
-        let input = fileInput.files[0];
     }
-    else if (inputType == 'inputTypeText') { // TODO: implement inferece from text input
+    else if (inputType == 'inputTypeText') {
         const textInput = document.getElementById('textInput');
-        if (textInput.value == '' || ) {
-            alert('Please select a file');
+        if (textInput.value == '') {
+            alert('Please type coordinates');
             return;
         }
-
-        let input = textInput.value;
     }
-
 
     const modelSelect = document.getElementById('modelSelect');
     if (modelSelect.value == '') {
@@ -230,7 +207,7 @@ function inference() {
     showLoading();
 
     var formData = new FormData();
-    formData.append('input', input);
+    formData.append('coordinates', JSON.stringify(globalCoordinates));
     formData.append('model_name', modelSelect.value);
     formData.append('config', 'Hello world!'); // TODO: implement getConfig()
     fetch('/inference', {
@@ -245,6 +222,10 @@ function inference() {
         Plotly.newPlot('resultTourPlotDisplay', graph.data, graph.layout);
         // displayPlot(data.plot_url, 'resultTourPlotDisplay');
     })
+    .catch(error => {
+        console.error('Error:', error);
+        // hideLoading();
+    });
 }
 
 function displayResultTour(data) {
@@ -252,7 +233,22 @@ function displayResultTour(data) {
     let content = 'x, y (The sorted coordinates will be display)<br>';
 
     for (let i=0; i < data.tour.length; i++) {
-        content += `<b>${data.tour[i]}</b>: (${data.sorted_x[i].toFixed(3)}, ${data.sorted_y[i].toFixed(3)})\t`;
+        let x = data.sorted_x[i];
+        let y = data.sorted_y[i];
+        if (Number.isInteger(x)) {
+            x = parseInt(x);
+        }
+        else {
+            x = x.toFixed(3);
+        }
+        if (Number.isInteger(y)){
+            y = parseInt(y);
+        }
+        else {
+            y = data.sorted_y[i].toFixed(3);
+        }
+        
+        content += `<b>${data.tour[i]}</b>: (${x}, ${y})\t`;
     }
     container.innerHTML = content;
 }

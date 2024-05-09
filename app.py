@@ -26,7 +26,11 @@ def index():
 
 @app.route('/draw-coordinates', methods=['POST'])
 def draw_coordinates():
-    coordinates = read_coordinates(request.files['file'])
+    coordinates = json.loads(request.form['coordinates'])
+    if coordinates['x'] == [] or coordinates['y'] == [] or\
+        len(coordinates['x']) != len(coordinates['y']):
+        return jsonify({'status': 'error', 'message': 'Invalid data'}), 400
+    coordinates = coordinates_from_dict(coordinates)
     fig = go.Figure(data=go.Scatter(x=coordinates[:,0], y=coordinates[:,1], mode='markers',
                                     marker=dict(size=10, color='red')),
                     layout=go.Layout(title=f'Input coordinates for {len(coordinates)} cities'))
@@ -55,9 +59,14 @@ def process_option():
 
 @app.route('/inference', methods=['POST'])
 def inference():
-    file = request.files['file']
+    coordinates = json.loads(request.form['coordinates'])
+    if coordinates['x'] == [] or coordinates['y'] == [] or\
+        len(coordinates['x']) != len(coordinates['y']):
+        return jsonify({'status': 'error', 'message': 'Invalid data'}), 400
+    
+    coordinates = coordinates_from_dict(coordinates)
     model_name = request.form['model_name']
-    coordinates = read_coordinates(file)
+    # TODO: exception handling for coordinates less than desired number of cities
     inferencer = Inferencer(model_name)
     result_tour = inferencer.inference(coordinates)
     sorted_coordinates = coordinates[result_tour.astype(int)]

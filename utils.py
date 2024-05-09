@@ -1,10 +1,10 @@
+import numpy as np
 import pandas as pd
 import json
 import plotly
 import plotly.graph_objs as go
 
 def draw_tour(coordinates):
-    # TODO: Implement drawing tour using plotly (or other interactive plot)
     fig = go.Figure(
         data=go.Scatter(x=coordinates[:,0], y=coordinates[:,1], mode='lines+markers',
                         marker=dict(size=10, color='red'),
@@ -33,6 +33,9 @@ def draw_tour(coordinates):
 
 def read_coordinates(file):
     return pd.read_csv(file).to_numpy()  # only supports .csv for now
+
+def coordinates_from_dict(coordinates):
+    return np.array([coordinates['x'], coordinates['y']]).T
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['csv']
