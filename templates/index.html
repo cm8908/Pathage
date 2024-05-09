@@ -15,18 +15,36 @@
 
 <div class="container">
     <div class="box">
-        <h1>Please input coordinates file (.csv)</h1>
-        <p>The coordinates file should follow the following format:<br>
-            x,y<br>
-            x1,y1<br>
-            x2,y2<br>
-            x3,y3<br>
-            ...<br>
-            xn,yn<br>
-        </p>
-        <form id="uploadForm" method="post" enctype="multipart/form-data">
-            <input onchange="onFileSelected()" id='fileInput' type="file" name="file" accept=".csv">
-        </form>
+        <select id="inputTypeSelect" onchange="changeInputTypeDisplay()">
+            <option value="">--Input Type--</option>
+            <option value="inputTypeFile">File Input</option>
+            <option value="inputTypeText">Text Input</option>
+        </select>
+        <div id="inputTypeFileDisplay" style="display:none">
+            <h1>Please input coordinates file (.csv)</h1>
+            <p>The coordinates file should follow the following format:<br>
+                x,y<br>
+                x1,y1<br>
+                x2,y2<br>
+                x3,y3<br>
+                ...<br>
+                xn,yn<br>
+            </p>
+            <form>
+                <input onchange="onFileSelected()" id='fileInput' type="file" name="file" accept=".csv">
+            </form>
+        </div>
+        <div id="inputTypeTextDisplay" style="display:none">
+            <h1>Please type coordinates in text input.</h1>
+            <p>The input coordinates should be in comma separated value format:<br>
+                x1,y1,x2,y2,x3,y3,...,xn,yn<br><br>
+                Only parentheses () comma , punctuation mark . and numbers are allowed.
+            </p>
+            <form>
+                <input oninput="onTextTyped()" id='textInput' type="text" onkeydown="preventEnterKey(event)">
+            </form>
+        </div>
+        
     </div>
     <div class="box" id="fileContentDisplay">
         Hello

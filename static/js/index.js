@@ -1,3 +1,19 @@
+function changeInputTypeDisplay() {
+    const inputType = document.getElementById('inputTypeSelect').value;
+    if (inputType == 'inputTypeFile') {
+        document.getElementById('inputTypeFileDisplay').style.display = 'block';
+        document.getElementById('inputTypeTextDisplay').style.display = 'none';
+    }
+    else if (inputType == 'inputTypeText') {
+        document.getElementById('inputTypeTextDisplay').style.display = 'block';
+        document.getElementById('inputTypeFileDisplay').style.display = 'none';
+    }
+    else if (inputType == '') {
+        document.getElementById('inputTypeFileDisplay').style.display = 'none';
+        document.getElementById('inputTypeTextDisplay').style.display = 'none';
+    }
+}
+
 function onFileSelected() {
     const file = document.getElementById('fileInput').files[0];
     if (!file) {
@@ -22,6 +38,85 @@ function onFileSelected() {
     };
     reader.readAsText(file);
     drawInputCoordinates(file);
+}
+
+function validateAndDisplay() {
+    // Get the input value
+    const inputField = document.getElementById("restricted-input");
+    let value = inputField.value;
+
+    // Replace any character that isn't a number, parentheses, comma, or punctuation
+    const validatedValue = value.replace(/[^0-9(),.]/g, '');
+
+    // Update the input field with the validated value
+    inputField.value = validatedValue;
+
+    // Display the validated value in the target div
+    document.getElementById("display-div").innerText = validatedValue;
+}
+
+function onTextTyped() {
+    const inputField = document.getElementById('textInput');
+    let value = inputField.value;
+    
+    let validatedValue = value.replace(/[^0-9().,\s]/g, '');
+    inputField.value = validatedValue;
+
+    validatedValue = validatedValue.replace(/\s+/g, '');
+    validatedValue = validatedValue.replace(/[()]/g, '');
+
+
+    splitValues = validatedValue.split(',');
+    let targetValue = '';
+    for (let i=0; i<splitValues.length; i++) {
+        if (splitValues[i] == '') {
+            continue;
+        }
+        if (i % 2 == 0) {
+            targetValue += `<b>${i/2}</b>: (${splitValues[i]}, `;
+        }
+        else {
+            targetValue += `${splitValues[i]})\t`;
+        }
+    }
+    document.getElementById('fileContentDisplay').innerHTML = targetValue;
+
+    //     if (num != '') {
+    //         alert();
+    //         let x = parseFloat(xy.split('.')[0]);
+    //         let y = parseFloat(xy.split('.')[1]);
+    //         document.getElementById('fileContentDisplay').innerText = xy;
+    // //         document.getElementById('fileContentDisplay').innerText += `<b>${index}</b>: (${x.toFixed(3)}, ${y.toFixed(3)})\t`;
+    //     }
+    // })
+    // document.getElementById('fileContentDisplay').innerText = validatedValue;
+
+
+
+    // var reader = new FileReader();
+    // reader.onload = function(e) {
+    //     var contents = e.target.result;
+    //     var lines = contents.split('\n');  // 줄바꿈 문자로 분리
+    //     var output = document.getElementById('fileContentDisplay');
+    //     output.innerHTML = 'index: x,y<br>';  // 기존 내용 초기화
+    
+    //     lines.forEach(function(line, index) {
+    //         if (index > 0 && line != '') {
+    //             let xy = line.split(',')
+    //             let x = parseFloat(xy[0]);
+    //             let y = parseFloat(xy[1]);
+    //             output.innerHTML += `<b>${index}</b>: (${x.toFixed(3)}, ${y.toFixed(3)})\t`;
+    //         }
+    //     });
+    // };
+    // reader.readAsText(file);
+    // drawInputCoordinates(file);
+}
+
+function preventEnterKey(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+    }
 }
 
 function drawInputCoordinates(file) {
@@ -94,11 +189,38 @@ function hideLoading() {
 }
 
 function inference() {
-    const fileInput = document.getElementById('fileInput');
-    if (fileInput.files.length == 0) {
-        alert('Please select a file');
-        return;
+    function inferenceFromFile() {
+        const fileInput = document.getElementById('fileInput');
+        if (fileInput.files.length == 0) {
+            alert('Please select a file');
+            return;
+        }        
     }
+
+    function inferenceFromText() {
+
+    }
+    const inputType = document.getElementById('inputTypeSelect').value;
+    if (inputType == 'inputTypeFile') {
+        const fileInput = document.getElementById('fileInput');
+        if (fileInput.files.length == 0) {
+            alert('Please select a file');
+            return;
+        }      
+
+        let input = fileInput.files[0];
+    }
+    else if (inputType == 'inputTypeText') { // TODO: implement inferece from text input
+        const textInput = document.getElementById('textInput');
+        if (textInput.value == '' || ) {
+            alert('Please select a file');
+            return;
+        }
+
+        let input = textInput.value;
+    }
+
+
     const modelSelect = document.getElementById('modelSelect');
     if (modelSelect.value == '') {
         alert('Please select a model');
@@ -108,7 +230,7 @@ function inference() {
     showLoading();
 
     var formData = new FormData();
-    formData.append('file', fileInput.files[0]);
+    formData.append('input', input);
     formData.append('model_name', modelSelect.value);
     formData.append('config', 'Hello world!'); // TODO: implement getConfig()
     fetch('/inference', {
