@@ -65,14 +65,23 @@ function onFileSelected() {
 }
 
 function onTextTyped() {
+    function validateText(text) {
+
+    }
     const inputField = document.getElementById('textInput');
     let value = inputField.value;
     
-    let validatedValue = value.replace(/[^0-9().,\s]/g, '');
+    let validatedValue = value
+                        .replace(/[^0-9().,\s]/g, '')
+                        .replace(/\({2,}/g, '(')
+                        .replace(/\){2,}/g, ')')
+                        .replace(/\,{2,}/g, ',')
+                        .replace(/\.{2,}/g, ',');
     inputField.value = validatedValue;
 
-    validatedValue = validatedValue.replace(/\s+/g, '');
-    validatedValue = validatedValue.replace(/[()]/g, '');
+    validatedValue = validatedValue
+                    .replace(/\s+/g, '')
+                    .replace(/[()]/g, '');
 
     splitValues = validatedValue.split(',');
     let xs = []; let ys = [];
