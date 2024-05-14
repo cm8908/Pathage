@@ -139,3 +139,39 @@ button:hover {
     97%,
     100%   {background-position: calc(0*100%/3) calc(0*100%/3),calc(1*100%/3) calc(0*100%/3),calc(2*100%/3) calc(0*100%/3),calc(3*100%/3) calc(0*100%/3)}
   }
+
+  /* Basic styles for the tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* Optional: adds underline to indicate it's hoverable */
+}
+
+/* Tooltip text styles, hidden by default */
+.tooltiptext {
+    visibility: hidden;
+    /* max-width: 300px; Maximum width to prevent overly wide tooltips */
+    background-color: black;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 5px 10px; /* Added horizontal padding for better text display */
+
+    /* Positioning and styling */
+    position: absolute;
+    z-index: 1;
+    top: 120%;
+    white-space: nowrap; /* Ensures the text stays in a single line */
+    left: 50%;
+    transform: translateX(-50%); /* Centering tooltip exactly, replacing margin-left */
+
+    /* Transitions for smooth appearance */
+    opacity: 0;
+    transition: opacity 0.5s, visibility 0.5s;
+}
+
+/* Tooltip becomes visible when hovering over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}

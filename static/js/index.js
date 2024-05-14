@@ -62,12 +62,16 @@ function onFileSelected() {
         drawInputCoordinates();
     };
     reader.readAsText(file);
+
+    if (isValidCoordinates()) {
+        activateInferenceButton();
+    }
+    else {
+        deactiveInferenceButton();
+    }
 }
 
 function onTextTyped() {
-    function validateText(text) {
-
-    }
     const inputField = document.getElementById('textInput');
     let value = inputField.value;
     
@@ -111,6 +115,13 @@ function onTextTyped() {
     globalCoordinates.x = xs;
     globalCoordinates.y = ys;
     drawInputCoordinates();
+
+    if (isValidCoordinates()) {
+        deactiveInferenceButton();
+    }
+    else {
+        activateInferenceButton();
+    }
 }
 
 function preventEnterKey(event) {
@@ -149,6 +160,7 @@ function sendOption(model_name) {
     .then(response => response.json())
     .then(data => {
         createOptionMenu(data);
+        checkMinCoordinates(data);
     })
     .catch(error => console.error('Error:', error));
 
@@ -176,6 +188,45 @@ function createOptionMenu(data) {
             container.appendChild(label);
             container.appendChild(document.createElement('br'));
         }
+    }
+}
+function activateInferenceButton() {
+    const inferenceBtn = document.getElementById('inferenceBtn');
+    inferenceBtn.disabled = false;
+    inferenceBtn.style.opacity = 1;
+    inferenceBtn.style.pointerEvents = 'auto';
+}
+
+function deactiveInferenceButton() {
+    const inferenceBtn = document.getElementById('inferenceBtn');
+    inferenceBtn.disabled = true;
+    inferenceBtn.style.opacity = 0.5;
+    inferenceBtn.style.pointerEvents = 'none';
+}
+function isValidCoordinates() {
+    if (globalCoordinates.x.length == 0 || globalCoordinates.y.length == 0 ||
+        globalCoordinates.x.length != globalCoordinates.y.length) {
+        return false;
+    }
+    return true;
+
+}
+function checkMinCoordinates(data) {
+    let numCoordinates = Math.min(globalCoordinates.x.length,
+                                  globalCoordinates.y.length);
+    var min_coordinates;
+    if ('min_coordinates' in data) {
+        min_coordinates = data.min_coordinates;
+    }
+    else {
+        min_coordinates = 0;
+    }
+    
+    if (numCoordinates >= min_coordinates) {
+        activateInferenceButton();
+    }
+    else {
+        deactiveInferenceButton();
     }
 }
 
@@ -289,6 +340,7 @@ function makeModelSelectOptions() {
 document.addEventListener('DOMContentLoaded', function() {
     makeModelSelectOptions();
     hideLoading();
+    deactiveInferenceButton();
 });
 // window.onload = makeModelSelectOptions;
 // window.onload = hideLoading;
