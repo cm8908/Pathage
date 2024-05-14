@@ -1,5 +1,4 @@
-import base64
-import io
+from web_utils import *
 from flask import Flask, render_template, request, jsonify, session, redirect
 import pymongo, os, uuid, logging, json
 import matplotlib.pyplot as plt
@@ -9,7 +8,7 @@ import plotly
 from inference import Inferencer
 from utils import *
 
-app = Flask(__name__)
+app = JsonApp(Flask(__name__))
 app.logger.setLevel(logging.DEBUG)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
@@ -62,7 +61,8 @@ def inference():
     coordinates = json.loads(request.form['coordinates'])
     if coordinates['x'] == [] or coordinates['y'] == [] or\
         len(coordinates['x']) != len(coordinates['y']):
-        return jsonify({'status': 'error', 'message': 'Invalid data'}), 400
+        raise ValueError('Invalid data: x or y coordinates are empty or have different lengths')
+        # return jsonify({'status': 'error', 'message': 'Invalid data'})
     
     coordinates = coordinates_from_dict(coordinates)
     model_name = request.form['model_name']

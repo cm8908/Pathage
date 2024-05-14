@@ -217,15 +217,15 @@ function inference() {
     .then(response => response.json())
     .then(data => {
         hideLoading();
+        if (data.status == 'error') {
+            alert(data.message);
+            return;
+        }
         displayResultTour(data);
         var graph = JSON.parse(data.graph);
         Plotly.newPlot('resultTourPlotDisplay', graph.data, graph.layout);
         // displayPlot(data.plot_url, 'resultTourPlotDisplay');
     })
-    .catch(error => {
-        console.error('Error:', error);
-        // hideLoading();
-    });
 }
 
 function displayResultTour(data) {
