@@ -230,7 +230,7 @@ function inference() {
 
 function displayResultTour(data) {
     var container = document.getElementById('resultTourDisplay');
-    let content = 'x, y (The sorted coordinates will be display)<br>';
+    let content = 'index: x, y (sorted)<br>';
 
     for (let i=0; i < data.tour.length; i++) {
         let x = data.sorted_x[i];

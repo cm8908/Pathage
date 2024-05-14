@@ -12,16 +12,17 @@
 </head>
 
 <body>
-
+<h1 class="title">Pathage - An Online Library of TSP Solvers</h1>
 <div class="container">
     <div class="box">
+        <h1>Choose input type</h1>
         <select id="inputTypeSelect" onchange="changeInputTypeDisplay()">
             <option value="">--Input Type--</option>
             <option value="inputTypeFile">File Input</option>
             <option value="inputTypeText">Text Input</option>
         </select>
         <div id="inputTypeFileDisplay" style="display:none">
-            <h1>Please input coordinates file (.csv)</h1>
+            <h2>Please input coordinates file (.csv)</h2>
             <p>The coordinates file should follow the following format:<br>
                 x,y<br>
                 x1,y1<br>
@@ -35,7 +36,7 @@
             </form>
         </div>
         <div id="inputTypeTextDisplay" style="display:none">
-            <h1>Please type coordinates in text input.</h1>
+            <h2>Please type coordinates in text input.</h2>
             <p>The input coordinates should be in comma separated value format:<br>
                 x1,y1,x2,y2,x3,y3,...,xn,yn<br><br>
                 Only parentheses () comma , punctuation mark . and numbers are allowed.
@@ -49,12 +50,12 @@
     <div class="box" id="fileContentDisplay">
         The input coordinates will be displayed here...
     </div>  
+</div>
+<div class="container">
     <div class="box">
         <!-- TODO: input coordinate by user interaction -->
         <div id="coordinatesPlotDisplay"></div>
     </div>
-</div>
-<div class="container">
     <div class="box">
         <h1>Inference model configuration</h1>
         <p>Choose the model you want to use for inference</p>
@@ -67,18 +68,16 @@
             <div id="modelDisplayConfigs"><b>- Model configurations: </b><br></div>
         </div>
         <div id="configContainer"></div>
-    </div>
-    <div class="box">
         <button onclick="inference()">Inference</button>
     </div>
 </div>
 <div class="container">
     <div class="box">
-        <h1>Result tour</h1>
+        <h1>Result tour coordinates</h1>
         <div id="resultTourDisplay">The resulting tour from the model will be shown here.</div>
     </div>
     <div class="box">
-        <h1>Plot of the tour</h1>
+        <h1>Result tour visualization</h2>
         <div id="resultTourPlotDisplay"></div>
     </div>  
 

@@ -1,12 +1,100 @@
-.container {
-    display: flex;
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family:Arial, Helvetica, sans-serif
 }
 
-.box {
-    width: 50%;
-    padding: 10px;
-    border: solid;
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-family:Georgia, 'Times New Roman', Times, serif
 }
+
+body {
+    background-color: #f3f4f6;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* Container for centering the layout */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 90%;
+    /* max-width: 1200px; */
+    margin: 20px auto;
+    padding: 10px;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    gap: 20px; /* Adds space between boxes */
+}
+
+/* Box for grouping content */
+.box {
+    flex: 1 1 300px; /* Each box will grow to fit, with a minimum width of 300px */
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Typography and links */
+h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+/* Style for forms and inputs */
+input[type="text"], input[type="file"], select {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .box {
+        width: 100%; /* Full width on smaller screens */
+        flex: none; /* Overrides the flex property set above */
+    }
+}
+
 
 /* 로딩 애니메이션을 담는 오버레이 */
 #overlay {
