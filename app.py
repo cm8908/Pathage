@@ -80,6 +80,7 @@ def inference():
 
 @app.route('/model-options', methods=['POST'])
 def model_options():
+    # TODO: show models that can be applied to given length of coordinates
     return jsonify({'model_options': sorted([os.path.splitext(fname)[0] for fname in os.listdir('configs')])})
 
 if __name__ == '__main__':

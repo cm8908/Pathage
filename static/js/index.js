@@ -96,7 +96,6 @@ function onTextTyped() {
             ys.push(y);
         }
     }
-    // TODO: error case: trailing commas (e.g. 1,2,2,2,,3)
     document.getElementById('fileContentDisplay').innerHTML = targetValue;
     
     resetGlobalCoordinates();
@@ -112,6 +111,7 @@ function preventEnterKey(event) {
 }
 
 function drawInputCoordinates() {
+    // TODO: draw plot within the browser
     var formData = new FormData();
     formData.append('coordinates', JSON.stringify(globalCoordinates));
     fetch('/draw-coordinates', {
