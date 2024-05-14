@@ -175,3 +175,24 @@ button:hover {
     visibility: visible;
     opacity: 1;
 }
+
+footer {
+    background-color: #f3f3f3; /* 푸터의 배경색 */
+    color: #333; /* 텍스트 색상 */
+    text-align: center; /* 텍스트를 중앙 정렬 */
+    padding: 20px 0; /* 상하 패딩 설정 */
+    margin-top: 40px; /* 푸터 위의 여백 */
+}
+
+footer p {
+    margin: 10px 0; /* 문단 간격 */
+}
+
+footer a {
+    color: #0077cc; /* 링크 색상 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+footer a:hover {
+    text-decoration: underline; /* 링크에 마우스를 올렸을 때 밑줄 표시 */
+}
