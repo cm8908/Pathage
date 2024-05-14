@@ -1,6 +1,7 @@
 from flask import jsonify
 from werkzeug.exceptions import HTTPException, default_exceptions, InternalServerError
 
+# TODO: Custom error handling https://velog.io/@chyoon0512/Flask-error-handler
 def JsonApp(app):
     def error_handling(error):
         app.logger.error('Error handler called')

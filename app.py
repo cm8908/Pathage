@@ -66,7 +66,6 @@ def inference():
     
     coordinates = coordinates_from_dict(coordinates)
     model_name = request.form['model_name']
-    # TODO: exception handling for coordinates less than desired number of cities
     inferencer = Inferencer(model_name)
     result_tour = inferencer.inference(coordinates)
     sorted_coordinates = coordinates[result_tour.astype(int)]
