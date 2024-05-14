@@ -148,6 +148,11 @@ function drawInputCoordinates() {
 
 function sendOption(model_name) {
 
+    if (model_name == '') {
+        resetOptionMenu();
+        deactiveInferenceButton();
+        return;
+    }
     fetch('/request-config', {
         method: 'POST',
         headers: {
@@ -166,6 +171,17 @@ function sendOption(model_name) {
 
 }
 
+function resetOptionMenu() {
+    var container = document.getElementById('modelDisplayName');
+    container.innerHTML = '<b>- Model Name: </b>';
+
+    container = document.getElementById('modelDisplayDesc');
+    container.innerHTML = '<b>- Model Description: </b>';
+
+    container = document.getElementById('modelDisplayConfigs');
+    container.innerHTML = '<b>- Model configurations: </b><br>';
+
+}
 function createOptionMenu(data) {
     const model_full_name = document.createElement('label');
     model_full_name.textContent = data.full_name;
