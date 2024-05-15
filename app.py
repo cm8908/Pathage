@@ -23,30 +23,6 @@ collection = db['coordinates']
 def index():
     return render_template('index.html')
 
-@app.route('/draw-coordinates', methods=['POST'])
-def draw_coordinates():
-    coordinates = json.loads(request.form['coordinates'])
-    if coordinates['x'] == [] or coordinates['y'] == [] or\
-        len(coordinates['x']) != len(coordinates['y']):
-        return jsonify({'status': 'error', 'message': 'Invalid data'}), 400
-    coordinates = coordinates_from_dict(coordinates)
-    fig = go.Figure(data=go.Scatter(x=coordinates[:,0], y=coordinates[:,1], mode='markers',
-                                    marker=dict(size=10, color='red')),
-                    layout=go.Layout(title=f'Input coordinates for {len(coordinates)} cities'))
-    graph_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    return jsonify({'graph': graph_json})
-    # plt.figure()
-    # plt.scatter(coordinates[:,0], coordinates[:,1], color='red')
-    # plt.title(f'Input coordinates for {len(coordinates)} cities')
-    
-    # img = io.BytesIO()
-    # plt.savefig(img, format='png')
-    # img.seek(0)
-    # plt.close()
-    # plot_url = base64.b64encode(img.getvalue()).decode()
-    # return jsonify({'plot_url': plot_url})
-
-
 @app.route('/request-config', methods=['POST'])
 def process_option():
     data = request.get_json()
@@ -80,7 +56,6 @@ def inference():
 
 @app.route('/model-options', methods=['POST'])
 def model_options():
-    # TODO: show models that can be applied to given length of coordinates
     return jsonify({'model_options': sorted([os.path.splitext(fname)[0] for fname in os.listdir('configs')])})
 
 if __name__ == '__main__':

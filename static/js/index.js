@@ -131,19 +131,20 @@ function preventEnterKey(event) {
 }
 
 function drawInputCoordinates() {
-    // TODO: draw plot within the browser
-    var formData = new FormData();
-    formData.append('coordinates', JSON.stringify(globalCoordinates));
-    fetch('/draw-coordinates', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        var graph = JSON.parse(data.graph);
-        Plotly.newPlot('coordinatesPlotDisplay', graph.data, graph.layout);
-    });
-    // .then(data => displayPlot(data.plot_url, 'coordinatesPlotDisplay'))
+    let trace = {
+        x: globalCoordinates.x,
+        y: globalCoordinates.y,
+        mode: 'markers',
+        marker: {
+            size: 10,
+            color: 'red'
+        },
+        type: 'scatter'
+    }
+    let data = [trace];
+
+    let layout = {title: `Input coordinates for ${globalCoordinates.x.length} cities`};
+    Plotly.newPlot('coordinatesPlotDisplay', data, layout);
 }
 
 function sendOption(model_name) {
