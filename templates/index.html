@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- <script src="//d3js.org/d3.v5.min.js"></script> -->
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
@@ -21,9 +22,10 @@
             <option value="">--Input Type--</option>
             <option value="inputTypeFile">File Input</option>
             <option value="inputTypeText">Text Input</option>
+            <option value="inputTypeClick">Click on Map</option>
         </select>
         <div id="inputTypeFileDisplay" style="display:none">
-            <h2>Please input coordinates file (.csv)</h2>
+            <h3>Please input coordinates file (.csv)</h3>
             <p>The coordinates file should follow the following format:<br>
                 x,y<br>
                 x1,y1<br>
@@ -37,7 +39,7 @@
             </form>
         </div>
         <div id="inputTypeTextDisplay" style="display:none">
-            <h2>Please type coordinates in text input.</h2>
+            <h3>Please type coordinates in text input.</h3>
             <p>The input coordinates should be in comma separated value format:<br>
                 x1,y1,x2,y2,x3,y3,...,xn,yn<br><br>
                 Only parentheses () comma , period . and numbers are allowed.
@@ -45,6 +47,9 @@
             <form>
                 <input oninput="onTextTyped()" id='textInput' type="text" onkeydown="preventEnterKey(event)">
             </form>
+        </div>
+        <div id="inputTypeClickDisplay" style="display:none">
+            <h3>Click points on the plot below.</h3>
         </div>
         
     </div>

@@ -8,14 +8,22 @@ function changeInputTypeDisplay() {
     if (inputType == 'inputTypeFile') {
         document.getElementById('inputTypeFileDisplay').style.display = 'block';
         document.getElementById('inputTypeTextDisplay').style.display = 'none';
+        document.getElementById('inputTypeClickDisplay').style.display = 'none';
     }
     else if (inputType == 'inputTypeText') {
-        document.getElementById('inputTypeTextDisplay').style.display = 'block';
         document.getElementById('inputTypeFileDisplay').style.display = 'none';
+        document.getElementById('inputTypeTextDisplay').style.display = 'block';
+        document.getElementById('inputTypeClickDisplay').style.display = 'none';
+    }
+    else if (inputType == 'inputTypeClick') {
+        document.getElementById('inputTypeFileDisplay').style.display = 'none';
+        document.getElementById('inputTypeTextDisplay').style.display = 'none';
+        document.getElementById('inputTypeClickDisplay').style.display = 'block';
     }
     else if (inputType == '') {
         document.getElementById('inputTypeFileDisplay').style.display = 'none';
         document.getElementById('inputTypeTextDisplay').style.display = 'none';
+        document.getElementById('inputTypeClickDisplay').style.display = 'none';
     }
 }
 
@@ -247,14 +255,12 @@ function checkMinCoordinates(data) {
     }
 }
 
-// 로딩 화면을 표시하는 함수
 function showLoading() {
-    document.getElementById('overlay').style.display = 'flex';  // 오버레이 보이기
+    document.getElementById('overlay').style.display = 'flex';  
 }
 
-// 로딩 화면을 숨기는 함수
 function hideLoading() {
-    document.getElementById('overlay').style.display = 'none';  // 오버레이 숨기기
+    document.getElementById('overlay').style.display = 'none'; 
 }
 
 function inference() {
@@ -359,5 +365,3 @@ document.addEventListener('DOMContentLoaded', function() {
     hideLoading();
     deactiveInferenceButton();
 });
-// window.onload = makeModelSelectOptions;
-// window.onload = hideLoading;
