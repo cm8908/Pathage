@@ -3,8 +3,37 @@ function resetGlobalCoordinates() {
     globalCoordinates = {'x': [], 'y': []};
 }
 
+function clearResultDisplay() {
+    let userConfirm = false;
+    if (document.getElementById('resultTourPlotDisplay').innerHTML != '') {
+        userConfirm = confirm('The previous result tour will be cleared. Do you want to continue?');
+        if (userConfirm) {
+            document.getElementById('resultTourDisplay').innerHTML = 'The resulting tour from the model will be shown here.';  // TODO: pack sentences into a file
+            document.getElementById('resultTourPlotDisplay').innerHTML = '';
+        }
+    }
+    return userConfirm;
+}
+
 function changeInputTypeDisplay() {
+    let change = clearResultDisplay();
+    const typeFile = document.getElementById('inputTypeFileDisplay');
+    const typeText = document.getElementById('inputTypeTextDisplay');
+    // if (typeFile.style.display == 'none' && typeText.style.display == 'none') {
+    //     change = true;
+    // }
     const inputType = document.getElementById('inputTypeSelect').value;
+    if (
+        (inputType == 'inputTypeFile' && typeFile.style.display == 'none') ||
+        (inputType == 'inputTypeText' && typeText.style.display == 'none') ||
+        (typeFile.style.display == 'none' && typeText.style.display == 'none')
+        ) {
+            change = true;
+        }
+
+    if (!change) { return; }  // TODO: If chosen 'cancel', do not clear result & do not change input type
+
+
     if (inputType == 'inputTypeFile') {
         document.getElementById('inputTypeFileDisplay').style.display = 'block';
         document.getElementById('inputTypeTextDisplay').style.display = 'none';
