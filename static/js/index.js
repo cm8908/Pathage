@@ -9,22 +9,34 @@ function changeInputTypeDisplay() {
         document.getElementById('inputTypeFileDisplay').style.display = 'block';
         document.getElementById('inputTypeTextDisplay').style.display = 'none';
         document.getElementById('inputTypeClickDisplay').style.display = 'none';
+
+        document.getElementById('textInput').value = '';
     }
     else if (inputType == 'inputTypeText') {
         document.getElementById('inputTypeFileDisplay').style.display = 'none';
         document.getElementById('inputTypeTextDisplay').style.display = 'block';
         document.getElementById('inputTypeClickDisplay').style.display = 'none';
+        
+        document.getElementById('fileInput').value = '';
     }
     else if (inputType == 'inputTypeClick') {
         document.getElementById('inputTypeFileDisplay').style.display = 'none';
         document.getElementById('inputTypeTextDisplay').style.display = 'none';
         document.getElementById('inputTypeClickDisplay').style.display = 'block';
+
+        document.getElementById('fileInput').value = '';
+        document.getElementById('textInput').value = '';
     }
     else if (inputType == '') {
         document.getElementById('inputTypeFileDisplay').style.display = 'none';
         document.getElementById('inputTypeTextDisplay').style.display = 'none';
         document.getElementById('inputTypeClickDisplay').style.display = 'none';
+
+        document.getElementById('fileInput').value = '';
+        document.getElementById('textInput').value = '';
     }
+    resetGlobalCoordinates();
+    document.getElementById('inputCoordinatesDisplay').innerText = 'The input coordinates will be displayed here...'
 }
 
 function formatCoord(num) {
@@ -48,7 +60,7 @@ function onFileSelected() {
     reader.onload = function(e) {
         var contents = e.target.result;
         var lines = contents.split('\n');  // 줄바꿈 문자로 분리
-        var output = document.getElementById('fileContentDisplay');
+        var output = document.getElementById('inputCoordinatesDisplay');
         output.innerHTML = 'index: x,y<br>';  // 기존 내용 초기화
     
         lines.forEach(function(line, index) {
@@ -117,7 +129,7 @@ function onTextTyped() {
             ys.push(y);
         }
     }
-    document.getElementById('fileContentDisplay').innerHTML = targetValue;
+    document.getElementById('inputCoordinatesDisplay').innerHTML = targetValue;
     
     resetGlobalCoordinates();
     globalCoordinates.x = xs;
