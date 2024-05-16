@@ -298,7 +298,7 @@ async function inference() {
     // alert(modelConfig);
     formData.append('coordinates', JSON.stringify(globalCoordinates));
     formData.append('model_name', modelSelect.value);
-    formData.append('config', JSON.stringify(modelConfig.config)); // TODO: implement getConfig()
+    formData.append('config', JSON.stringify(modelConfig.config));
     fetch('/inference', {
         method: 'POST',
         body: formData
