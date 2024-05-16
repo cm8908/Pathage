@@ -155,14 +155,8 @@ function drawInputCoordinates() {
     Plotly.newPlot('coordinatesPlotDisplay', data, layout);
 }
 
-function sendOption(model_name) {
-
-    if (model_name == '') {
-        resetOptionMenu();
-        deactiveInferenceButton();
-        return;
-    }
-    fetch('/request-config', {
+async function getConfig(model_name) {
+    const response = await fetch('/request-config', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -171,13 +165,23 @@ function sendOption(model_name) {
             model_name: model_name,
         }),
     })
-    .then(response => response.json())
-    .then(data => {
+    const data = await response.json();
+    return data;
+}
+
+async function sendOption(model_name) {
+    if (model_name == '') {
+        resetOptionMenu();
+        deactiveInferenceButton();
+        return;
+    }
+    try {
+        let data = await getConfig(model_name);
         createOptionMenu(data);
         checkMinCoordinates(data);
-    })
-    .catch(error => console.error('Error:', error));
-
+    } catch(error) {
+        console.error('Error:', error);
+    }
 }
 
 function resetOptionMenu() {
@@ -263,7 +267,7 @@ function hideLoading() {
     document.getElementById('overlay').style.display = 'none'; 
 }
 
-function inference() {
+async function inference() {
 
     const inputType = document.getElementById('inputTypeSelect').value;
     if (inputType == 'inputTypeFile') {
@@ -290,9 +294,11 @@ function inference() {
     showLoading();
 
     var formData = new FormData();
+    var modelConfig = await getConfig(modelSelect.value);
+    // alert(modelConfig);
     formData.append('coordinates', JSON.stringify(globalCoordinates));
     formData.append('model_name', modelSelect.value);
-    formData.append('config', 'Hello world!'); // TODO: implement getConfig()
+    formData.append('config', JSON.stringify(modelConfig.config)); // TODO: implement getConfig()
     fetch('/inference', {
         method: 'POST',
         body: formData

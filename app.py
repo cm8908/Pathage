@@ -28,9 +28,7 @@ def process_option():
     data = request.get_json()
     model_name = data['model_name']
     config = json.load(open(f'configs/{model_name}.json'))
-    # app.logger.debug(config)
     return jsonify(config)
-    # return jsonify({'message': 'Config file loaded successfully'})
 
 @app.route('/inference', methods=['POST'])
 def inference():
@@ -38,11 +36,12 @@ def inference():
     if coordinates['x'] == [] or coordinates['y'] == [] or\
         len(coordinates['x']) != len(coordinates['y']):
         raise ValueError('Invalid data: x or y coordinates are empty or have different lengths')
-        # return jsonify({'status': 'error', 'message': 'Invalid data'})
     
     coordinates = coordinates_from_dict(coordinates)
     model_name = request.form['model_name']
-    inferencer = Inferencer(model_name)
+    model_config = json.loads(request.form['config']) 
+
+    inferencer = Inferencer(model_name, model_config)
     result_tour = inferencer.inference(coordinates)
     sorted_coordinates = coordinates[result_tour.astype(int)]
     graph_json = draw_tour(sorted_coordinates)
