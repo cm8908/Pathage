@@ -4,7 +4,6 @@ from werkzeug.exceptions import HTTPException, default_exceptions, InternalServe
 # TODO: Custom error handling https://velog.io/@chyoon0512/Flask-error-handler
 def JsonApp(app):
     def error_handling(error):
-        app.logger.error('Error handler called')
         if isinstance(error, HTTPException):  # HTTP Exeption의 경우
             result = {
                 'status': 'error',
@@ -18,8 +17,9 @@ def JsonApp(app):
                 'status': 'error',
                 'code': 500,
                 'description': description,
-                'message': '500 Internal server error: ' + str(error)
+                'message': '500 Internal server error'# + str(error)
             }
+            app.logger.error(error)
         resp = jsonify(result)
         resp.status_code = result['code']
         return resp
