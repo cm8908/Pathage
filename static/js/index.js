@@ -91,12 +91,12 @@ function onFileSelected() {
     }
 }
 
-function onTextTyped() {
+function onTextTyped() { 
     const inputField = document.getElementById('textInput');
     let value = inputField.value;
     
     let validatedValue = value
-                        .replace(/[^0-9().,\s]/g, '')
+                        .replace(/[^0-9().,-\s]/g, '')
                         .replace(/\({2,}/g, '(')
                         .replace(/\){2,}/g, ')')
                         .replace(/\,{2,}/g, ',')
