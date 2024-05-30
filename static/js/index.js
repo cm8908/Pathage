@@ -80,15 +80,15 @@ function onFileSelected() {
         globalCoordinates.x = xs;
         globalCoordinates.y = ys;
         drawInputCoordinates();
+
+        if (isValidCoordinates()) {
+            activateInferenceButton();
+        }
+        else {
+            deactiveInferenceButton();
+        }
     };
     reader.readAsText(file);
-
-    if (isValidCoordinates()) {
-        activateInferenceButton();
-    }
-    else {
-        deactiveInferenceButton();
-    }
 }
 
 function onTextTyped() { 
