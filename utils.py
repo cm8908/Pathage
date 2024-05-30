@@ -6,11 +6,12 @@ import plotly.graph_objs as go
 
 def draw_tour(coordinates):
     tour_length = compute_tour_length(coordinates)
+    tour_length_normalized = compute_normalized_tour_length(coordinates)
     fig = go.Figure(
         data=go.Scatter(x=coordinates[:,0], y=coordinates[:,1], mode='lines+markers',
                         marker=dict(size=10, color='red'),
                         line=dict(color='black')),
-        layout=go.Layout(title=f'Result tour for {len(coordinates)} cities <br> - Length: {tour_length:.3f}', showlegend=False)
+        layout=go.Layout(title=f'Result tour for {len(coordinates)} cities <br> - Length: {tour_length:.3f} <br> - Normalized: {tour_length_normalized:.3f}', showlegend=False)
     )
     fig.add_trace(go.Scatter(x=[coordinates[-1][0], coordinates[0][0]], y=[coordinates[-1][1], coordinates[0][1]], mode='lines', line=dict(color='black')))
     # for i in range(len(coordinates)-1):
@@ -43,3 +44,7 @@ def allowed_file(filename):
 
 def compute_tour_length(coordinates):
     return np.linalg.norm(coordinates - np.roll(coordinates, 1, axis=0), axis=1).sum()
+
+def compute_normalized_tour_length(coordinates):
+    normalized_coordinates = (coordinates - coordinates.min()) / (coordinates.max() - coordinates.min())
+    return compute_tour_length(normalized_coordinates)
