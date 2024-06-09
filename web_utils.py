@@ -1,3 +1,4 @@
+import traceback
 from flask import jsonify
 from werkzeug.exceptions import HTTPException, default_exceptions, InternalServerError
 
@@ -17,9 +18,10 @@ def JsonApp(app):
                 'status': 'error',
                 'code': 500,
                 'description': description,
-                'message': '500 Internal server error'# + str(error)
+                'message': '500 Internal server error'
             }
             app.logger.error(error)
+            app.logger.error(traceback.format_exc())
         resp = jsonify(result)
         resp.status_code = result['code']
         return resp
