@@ -215,7 +215,7 @@ function createOptionMenu(data) {
     container.appendChild(model_full_name);
 
     const model_description = document.createElement('label');
-    model_description.textContent = data.description;
+    model_description.innerHTML = data.description;
     var container = document.getElementById('modelDisplayDesc');
     container.innerHTML = '<b>- Model Description: </b>';
     container.appendChild(model_description);
