@@ -1,3 +1,4 @@
+import sys
 from web_utils import *
 from flask import Flask, render_template, request, jsonify, session, redirect
 import pymongo, os, uuid, logging, json
@@ -29,6 +30,17 @@ def process_option():
     model_name = data['model_name']
     config = json.load(open(f'configs/{model_name}.json'))
     return jsonify(config)
+
+# @app.route('/request-config-options', methods=['POST'])
+# def process_config_options():
+#     data = request.get_json()
+#     model_name = data['model_name']
+#     config_key = data['config_key']
+#     selectable_options = MODEL_DICT[model_name]['selectable_options']
+#     print(selectable_options[config_key](), file=sys.stderr)
+#     return jsonify({'config_options': selectable_options[config_key]()})
+    
+    
 
 @app.route('/inference', methods=['POST'])
 def inference():
