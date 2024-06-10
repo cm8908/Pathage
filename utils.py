@@ -48,3 +48,6 @@ def compute_tour_length(coordinates):
 def compute_normalized_tour_length(coordinates):
     normalized_coordinates = (coordinates - coordinates.min()) / (coordinates.max() - coordinates.min())
     return compute_tour_length(normalized_coordinates)
+
+def get_ortools_enums(enum):
+    return [name for name in enum.__dict__.keys() if not name.startswith('_') and isinstance(enum.__dict__[name], int)]

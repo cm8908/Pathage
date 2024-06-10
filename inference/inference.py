@@ -11,7 +11,7 @@ class Inferencer:
         self.model_config = model_config
         self.model_type = MODEL_DICT[model_name]['type']
 
-        if self.model_type == 'nn':
+        if self.model_type == 'NN':
             self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
             self.model = MODEL_DICT[model_name]['instance'](**self.model_config).to(self.device)
             model_weights = MODEL_DICT[model_name]['weights'] if 'weights' in MODEL_DICT[model_name] else None
@@ -61,14 +61,14 @@ class Inferencer:
                 getattr(routing_enums_pb2.FirstSolutionStrategy, self.model_config['first_solution_strategy'])
             )
         else:
-            search_parameters.first_solution_strategy = pywrapcp.FirstSolutionStrategy.PATH_CHEAPEST_ARC
+            search_parameters.first_solution_strategy = routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC
         ## Local Search Metaheuristic
         if hasattr(routing_enums_pb2.LocalSearchMetaheuristic, self.model_config['local_search_metaheuristic']):
             search_parameters.local_search_metaheuristic = (
                 getattr(routing_enums_pb2.LocalSearchMetaheuristic, self.model_config['local_search_metaheuristic'])
             )
         else:
-            search_parameters.local_search_metaheuristic = pywrapcp.LocalSearchMetaheuristic.GUIDED_LOCAL_SEARCH
+            search_parameters.local_search_metaheuristic = routing_enums_pb2.LocalSearchMetaheuristic.GUIDED_LOCAL_SEARCH
         ## Time Limit
         search_parameters.time_limit.seconds = self.model_config['time_limit']
         ## Log Search

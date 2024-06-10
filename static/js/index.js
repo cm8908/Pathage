@@ -225,9 +225,53 @@ function createOptionMenu(data) {
     for (const key in data.config) {
         if (data.config.hasOwnProperty(key)) {
             const label = document.createElement('label');
-            label.textContent = key + ": " + data.config[key];
-            container.appendChild(label);
-            container.appendChild(document.createElement('br'));
+            label.textContent = key + ": ";
+            // IF config value is array (selectable)
+            if (Array.isArray(data.config[key])) {
+                const select = document.createElement('select');  // TODO: label-select inline display
+                for (const value of data.config[key]) {
+                    const option = document.createElement('option');
+                    option.value = value;
+                    option.text = value;
+                    select.appendChild(option);
+                }
+                container.appendChild(label);
+                container.appendChild(select);
+                container.appendChild(document.createElement('br'));
+            }
+            // else if (data.config[key] == null) {
+            //     // IF config value is null (selectable but options needs to be imported from server)
+            //     fetch('/request-config-options', {
+            //         method: 'POST',
+            //         headers: {
+            //             'Content-Type': 'application/json',
+            //         },
+            //         body: JSON.stringify({
+            //             model_name: data.model_name,
+            //             config_key : key,
+            //         })
+            //     })
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         const select = document.createElement('select');
+            //         for (const value of data.config_options) {
+            //             alert(value);
+            //             const option = document.createElement('option');
+            //             option.value = value;
+            //             option.text = value;
+            //             select.appendChild(option);
+            //         }
+            //         container.appendChild(label);
+            //         container.appendChild(select);
+            //         container.appendChild(document.createElement('br'));
+            //     })
+            // }
+            else {
+                // IF cofig value if a fixed value (not selectable)
+                label.textContent += data.config[key];
+                container.appendChild(label);
+                container.appendChild(document.createElement('br'));
+            }
         }
     }
 }
