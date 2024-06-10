@@ -181,6 +181,18 @@ async function getConfig(model_name) {
     return data;
 }
 
+async function getConfigFromHTML(model_name) {
+    const data = await getConfig(model_name);
+    for (const key in data.config) {
+        if (Array.isArray(data.config[key])) {
+            const select = document.getElementById(key);
+            data.config[key] = select.value;
+        }
+    }
+    return data;
+}
+
+// onchange of select # modelSelect
 async function sendOption(model_name) {
     if (model_name == '') {
         resetOptionMenu();
@@ -227,8 +239,9 @@ function createOptionMenu(data) {
             const label = document.createElement('label');
             label.textContent = key + ": ";
             // IF config value is array (selectable)
-            if (Array.isArray(data.config[key])) {
+            if (Array.isArray(data.config[key]) && data.config[key][0] != null) {
                 const select = document.createElement('select');  // TODO: label-select inline display
+                select.id = key;
                 for (const value of data.config[key]) {
                     const option = document.createElement('option');
                     option.value = value;
@@ -237,6 +250,20 @@ function createOptionMenu(data) {
                 }
                 container.appendChild(label);
                 container.appendChild(select);
+                container.appendChild(document.createElement('br'));
+            }
+            else if (Array.isArray(data.config[key]) && data.config[key][0] == null) {
+                alert(data.config[key][2]);
+                // IF config value starts with null and is an array (inputtable)
+                const input = document.createElement('input');
+                input.id = key;
+                input.value = data.config[key][1];
+                input.type = data.config[key][2];
+                input.min = data.config[key][3];
+                input.required = true;
+
+                container.appendChild(label);
+                container.appendChild(input);
                 container.appendChild(document.createElement('br'));
             }
             // else if (data.config[key] == null) {
@@ -267,9 +294,13 @@ function createOptionMenu(data) {
             //     })
             // }
             else {
-                // IF cofig value if a fixed value (not selectable)
-                label.textContent += data.config[key];
+                // IF cofig value is a fixed value (not selectable)
+                const value_label = document.createElement('label');
+                value_label.textContent = data.config[key];
+
+                // label.textContent += data.config[key];
                 container.appendChild(label);
+                container.appendChild(value_label);
                 container.appendChild(document.createElement('br'));
             }
         }
@@ -350,8 +381,7 @@ async function inference() {
     showLoading();
 
     var formData = new FormData();
-    var modelConfig = await getConfig(modelSelect.value);
-    // alert(modelConfig);
+    var modelConfig = await getConfigFromHTML(modelSelect.value);
     formData.append('coordinates', JSON.stringify(globalCoordinates));
     formData.append('model_name', modelSelect.value);
     formData.append('config', JSON.stringify(modelConfig.config));

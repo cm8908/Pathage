@@ -71,8 +71,6 @@ class Inferencer:
             search_parameters.local_search_metaheuristic = routing_enums_pb2.LocalSearchMetaheuristic.GUIDED_LOCAL_SEARCH
         ## Time Limit
         search_parameters.time_limit.seconds = self.model_config['time_limit']
-        ## Log Search
-        search_parameters.log_search = self.model_config['log_search']        
         # Solve!
         solution = routing.SolveWithParameters(search_parameters)
 
