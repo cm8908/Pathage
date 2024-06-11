@@ -1,0 +1,7 @@
+{
+    "model_name": "concorde",
+    "full_name": "Concorde TSP Solver",
+    "description": "Concorde is a computer code for the symmetric traveling salesman problem (TSP) and some related network optimization problems. <a href=\"https://developers.google.com/optimization\">Official website</a>. <a href=\"https://github.com/jvkersch/pyconcorde\">pyconcorde</a>.",
+    "config": {
+    }
+}

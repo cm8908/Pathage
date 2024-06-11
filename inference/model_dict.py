@@ -33,5 +33,8 @@ MODEL_DICT = {
         #     'first_solution_strategy': lambda: get_ortools_enums(FirstSolutionStrategy),
         #     'local_search_metaheuristic': lambda: get_ortools_enums(LocalSearchMetaheuristic),
         # }
+    },
+    'concorde': {
+        'type': 'concorde'
     }
 }

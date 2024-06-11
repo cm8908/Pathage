@@ -30,7 +30,7 @@
             "GENERIC_TABU_SEARCH"
         ],
         "time_limit": [null, 60, "number", 0],
-        "initial_point": ["zero", "random"]
-    },
-    "min_coordinates": 11
+        "initial_point": ["zero", "random"],
+        "coordinate_multiplier": [null, 100, "number", 1]
+    }
 }

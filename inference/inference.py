@@ -4,6 +4,7 @@ import sys
 from inference import MODEL_DICT
 from scipy.spatial import distance_matrix
 from ortools.constraint_solver import pywrapcp, routing_enums_pb2
+from concorde.tsp import TSPSolver
 
 class Inferencer:
     def __init__(self, model_name: str, model_config: dict):
@@ -19,23 +20,27 @@ class Inferencer:
                 self.model.load_state_dict(torch.load(model_weights))
             self.forward = MODEL_DICT[model_name]['forward']
 
-    # TODO: add concorde, gurobi or ortools heuristics
-    # TODO: add kool, bresson100, yang and OPRO
-    def inference(self, coordinates):
+    # TODO: bresson and jung for n=selectable
+    # TODO: add kool, yang and OPRO
+    def inference(self, coordinates: np.ndarray) -> np.ndarray:
         if self.model_type == 'NN':
             return self.nn_inference(coordinates)
         elif self.model_type == 'ortools':
             return self.ortools_inference(coordinates)
+        elif self.model_type == 'concorde':
+            return self.concorde_inference(coordinates)
         else:
             raise NotImplementedError('Only Neural Networks are supported for now')
         
-
+    def concorde_inference(self, coordinates):
+        return TSPSolver.from_data(coordinates[:, 0], coordinates[:, 1], norm='GEO').solve().tour.astype(int)
+    
     def ortools_inference(self, coordinates):
         initial_point = {
                 'zero': 0, 'random': np.random.randint(0, len(coordinates))
             }[self.model_config['initial_point']]
         # Set up data & manager TODO: data range
-        x = (coordinates * 100).astype(int)
+        x = (coordinates * self.model_config['coordinate_multiplier']).astype(int)
 
         data = {
             'distance_matrix': distance_matrix(x, x).astype(int),
