@@ -19,6 +19,21 @@ body {
     line-height: 1.5;
 }
 
+/* Model configuration label - selection */
+.inline-label-select {
+    display: inline-block;
+    margin-right: 5px; 
+}
+.inline-container {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+.inline-container + .inline-container {
+    margin-top: 0; /* 필요에 따라 간격 조정 */
+}
+
 /* Container for centering the layout */
 .container {
     display: flex;

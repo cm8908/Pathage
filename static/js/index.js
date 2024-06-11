@@ -238,9 +238,14 @@ function createOptionMenu(data) {
         if (data.config.hasOwnProperty(key)) {
             const label = document.createElement('label');
             label.textContent = key + ": ";
+            label.classList.add('inline-label-select');
+
+            const inlineContainer = document.createElement('div');
+            inlineContainer.classList.add('inline-container');
+
             // IF config value is array (selectable)
             if (Array.isArray(data.config[key]) && data.config[key][0] != null) {
-                const select = document.createElement('select');  // TODO: label-select inline display
+                const select = document.createElement('select'); 
                 select.id = key;
                 for (const value of data.config[key]) {
                     const option = document.createElement('option');
@@ -248,12 +253,12 @@ function createOptionMenu(data) {
                     option.text = value;
                     select.appendChild(option);
                 }
-                container.appendChild(label);
-                container.appendChild(select);
+                inlineContainer.appendChild(label);
+                inlineContainer.appendChild(select);
+                container.appendChild(inlineContainer);
                 container.appendChild(document.createElement('br'));
             }
             else if (Array.isArray(data.config[key]) && data.config[key][0] == null) {
-                alert(data.config[key][2]);
                 // IF config value starts with null and is an array (inputtable)
                 const input = document.createElement('input');
                 input.id = key;
@@ -262,8 +267,9 @@ function createOptionMenu(data) {
                 input.min = data.config[key][3];
                 input.required = true;
 
-                container.appendChild(label);
-                container.appendChild(input);
+                inlineContainer.appendChild(label);
+                inlineContainer.appendChild(input);
+                container.appendChild(inlineContainer);
                 container.appendChild(document.createElement('br'));
             }
             // else if (data.config[key] == null) {
@@ -299,8 +305,9 @@ function createOptionMenu(data) {
                 value_label.textContent = data.config[key];
 
                 // label.textContent += data.config[key];
-                container.appendChild(label);
-                container.appendChild(value_label);
+                inlineContainer.appendChild(label);
+                inlineContainer.appendChild(value_label);
+                container.appendChild(inlineContainer);
                 container.appendChild(document.createElement('br'));
             }
         }
