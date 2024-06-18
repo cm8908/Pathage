@@ -253,7 +253,6 @@ function createOptionMenu(data) {
                 container.appendChild(document.createElement('br'));
             }
             else if (Array.isArray(data.config[key]) && data.config[key][0] == null) {
-                alert(data.config[key][2]);
                 // IF config value starts with null and is an array (inputtable)
                 const input = document.createElement('input');
                 input.id = key;
