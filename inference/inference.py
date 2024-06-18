@@ -40,7 +40,7 @@ class Inferencer:
                 'zero': 0, 'random': np.random.randint(0, len(coordinates))
             }[self.model_config['initial_point']]
         # Set up data & manager TODO: data range
-        x = (coordinates * self.model_config['coordinate_multiplier']).astype(int)
+        x = (coordinates * float(self.model_config['coordinate_multiplier'])).astype(int)
 
         data = {
             'distance_matrix': distance_matrix(x, x).astype(int),
@@ -75,7 +75,7 @@ class Inferencer:
         else:
             search_parameters.local_search_metaheuristic = routing_enums_pb2.LocalSearchMetaheuristic.GUIDED_LOCAL_SEARCH
         ## Time Limit
-        search_parameters.time_limit.seconds = self.model_config['time_limit']
+        search_parameters.time_limit.seconds = int(self.model_config['time_limit'])
         # Solve!
         solution = routing.SolveWithParameters(search_parameters)
 
