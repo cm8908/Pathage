@@ -1,2 +1,9 @@
 project expansion.txt
 */__pycache__
+.git
+.gitignore
+.dockerignore
+__pycache__
+*.pyc
+*.pyo
+*.pyd
