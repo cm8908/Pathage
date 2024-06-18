@@ -85,7 +85,7 @@ function onFileSelected() {
             activateInferenceButton();
         }
         else {
-            deactiveInferenceButton();
+            deactivateInferenceButton();
         }
     };
     reader.readAsText(file);
@@ -137,10 +137,10 @@ function onTextTyped() {
     drawInputCoordinates();
 
     if (isValidCoordinates()) {
-        deactiveInferenceButton();
+        activateInferenceButton();
     }
     else {
-        activateInferenceButton();
+        deactivateInferenceButton();
     }
 }
 
@@ -196,7 +196,7 @@ async function getConfigFromHTML(model_name) {
 async function sendOption(model_name) {
     if (model_name == '') {
         resetOptionMenu();
-        deactiveInferenceButton();
+        deactivateInferenceButton();
         return;
     }
     try {
@@ -312,7 +312,7 @@ function activateInferenceButton() {
     inferenceBtn.style.pointerEvents = 'auto';
 }
 
-function deactiveInferenceButton() {
+function deactivateInferenceButton() {
     const inferenceBtn = document.getElementById('inferenceBtn');
     inferenceBtn.disabled = true;
     inferenceBtn.style.opacity = 0.5;
@@ -341,7 +341,7 @@ function checkMinCoordinates(data) {
         activateInferenceButton();
     }
     else {
-        deactiveInferenceButton();
+        deactivateInferenceButton();
     }
 }
 
@@ -454,5 +454,5 @@ function makeModelSelectOptions() {
 document.addEventListener('DOMContentLoaded', function() {
     makeModelSelectOptions();
     hideLoading();
-    deactiveInferenceButton();
+    deactivateInferenceButton();
 });
