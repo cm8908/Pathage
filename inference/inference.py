@@ -17,7 +17,7 @@ class Inferencer:
             self.model = MODEL_DICT[model_name]['instance'](**self.model_config).to(self.device)
             model_weights = MODEL_DICT[model_name]['weights'] if 'weights' in MODEL_DICT[model_name] else None
             if model_weights is not None:
-                self.model.load_state_dict(torch.load(model_weights), map_location=self.device)
+                self.model.load_state_dict(torch.load(model_weights, map_location=self.device))
             self.forward = MODEL_DICT[model_name]['forward']
 
     # TODO: bresson and jung for n=selectable
