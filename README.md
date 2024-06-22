@@ -7,5 +7,6 @@ The Pathage is a Flask based server that allows its users to run different types
 # What is TSP (Traveling Salesman Problem)?
 The travelling salesman problem, also known as the travelling salesperson problem (TSP), asks the following question: "Given a list of cities and the distances between each pair of cities, what is the shortest possible route that visits each city exactly once and returns to the origin city?" It is an NP-hard problem in combinatorial optimization, important in theoretical computer science and operations research. [Wikipedia](https://en.wikipedia.org/wiki/Travelling_salesman_problem)
 
+
 ---
 Note. I created this repository for my own study/practice on docker, flask, and pytorch deployment on the web. Please be noted that their can be many mistakes and please let me know any bugs or issues.
