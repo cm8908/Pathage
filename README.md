@@ -9,4 +9,3 @@ The travelling salesman problem, also known as the travelling salesperson proble
 
 
 ---
-Note. I created this repository for my own study/practice on docker, flask, and pytorch deployment on the web. Please be noted that their can be many mistakes and please let me know any bugs or issues.
