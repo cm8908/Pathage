@@ -29,9 +29,18 @@ services:
           devices:
             - driver: nvidia
               capabilities: [gpu]
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - 81:80
+    depends_on:
+      - server
+    networks:
+      - pathage-net
 
-volumes:
-  user-coordinate-data:
+# volumes:
+#   user-coordinate-data:
   
 networks:
   pathage-net:
