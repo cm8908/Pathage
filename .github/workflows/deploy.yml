@@ -61,7 +61,7 @@ jobs:
           docker pull ${{ secrets.DOCKER_USERNAME }}/pathage-server:latest
           docker pull ${{ secrets.DOCKER_USERNAME }}/pathage-nginx:latest
           cd /home/ec2-user
-          wget https://github.com/cm8908/Pathage/blob/main/docker-compose.yml -P /home/ec2-user
+          wget https://raw.githubusercontent.com/cm8908/Pathage/main/docker-compose.yml -O /home/ec2-user/docker-compose.yml
           docker-compose down
           docker-compose up -d
         EOF

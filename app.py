@@ -70,4 +70,4 @@ def model_options():
     return jsonify({'model_options': sorted([os.path.splitext(fname)[0] for fname in os.listdir('configs')])})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
