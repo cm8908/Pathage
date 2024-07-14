@@ -23,12 +23,19 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build and Push Docker Image
+    - name: Build and Push Flask Docker Image
       uses: docker/build-push-action@v2
       with:
         context: .
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/pathage-server:latest
+
+    - name: Build and Push Nginx Docker Image
+      uses: docker/build-push-action@v2
+      with:
+        context: ./nginx/.
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/pathage-nginx:latest
 
   deploy:
     name: Deploy to EC2
@@ -52,7 +59,9 @@ jobs:
         ssh -i /tmp/key -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker pull ${{ secrets.DOCKER_USERNAME }}/pathage-server:latest
+          docker pull ${{ secrets.DOCKER_USERNAME }}/pathage-nginx:latest
           cd /home/ec2-user
+          wget https://github.com/cm8908/Pathage/blob/main/docker-compose.yml -P /home/ec2-user
           docker-compose down
           docker-compose up -d
         EOF

@@ -12,32 +12,44 @@ services:
   #     - pathage-net
 
   server:
-    image: pathage-server
-    container_name: server
-    build: .
-    volumes:
-      - .:/app
+    image: fmsjung/pathage-server
+    #    volumes:  for production
+    #      - .:/app
     ports:
       - "5000:5000"
     networks:
       - pathage-net
     # depends_on:
     #   - db
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              capabilities: [gpu]
+    #    deploy:
+    #      resources:
+    #        reservations:
+    #          devices:
+    #            - driver: nvidia
+    #              capabilities: [gpu]
   nginx:
-    build:
-      context: ./nginx
+    image: fmsjung/pathage-nginx
+
     ports:
-      - 81:80
+      - 80:80
+      - 443:443
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
     depends_on:
       - server
     networks:
       - pathage-net
+  
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    networks:
+      - pathage-net
+    # renew certificate every 12 hours
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h; done'"
 
 # volumes:
 #   user-coordinate-data:
