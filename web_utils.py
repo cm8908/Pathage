@@ -2,6 +2,11 @@ import traceback
 from flask import jsonify
 from werkzeug.exceptions import HTTPException, default_exceptions, InternalServerError
 
+class CustomError(Exception):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+        
 # TODO: Custom error handling https://velog.io/@chyoon0512/Flask-error-handler
 def JsonApp(app):
     def error_handling(error):
@@ -10,6 +15,12 @@ def JsonApp(app):
                 'status': 'error',
                 'code': error.code,
                 'description': error.description,
+                'message': str(error)
+            }
+        elif isinstance(error, CustomError):
+            result = {
+                'status': 'error',
+                'code': 500,
                 'message': str(error)
             }
         else:

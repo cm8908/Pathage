@@ -270,7 +270,7 @@ class Bresson(nn.Module):
       sumLogProbOfActions of size (bsz,) : batch of sum_t log prob( pi_t | pi_(t-1),...,pi_0 )
     """
     
-    def __init__(self, dim_emb, dim_ff, nb_layers_encoder, nb_layers_decoder, nb_heads, dim_input_nodes=2, max_len_PE=1000, batchnorm=True):
+    def __init__(self, dim_emb, dim_ff, nb_layers_encoder, nb_layers_decoder, nb_heads, dim_input_nodes=2, max_len_PE=1000, batchnorm=True, **kwargs):
         super(Bresson, self).__init__()
         
         self.dim_emb = dim_emb

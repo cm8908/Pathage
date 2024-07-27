@@ -319,7 +319,7 @@ class Jung(nn.Module):
     """
     
     def __init__(self, embedding, nb_neighbors, kernel_size, dim_emb, dim_ff, nb_layers_encoder, nb_layers_decoder, nb_heads, dim_input_nodes=2, max_len_PE=1000,
-                 segm_len=None, batchnorm=True):
+                 segm_len=None, batchnorm=True, **kwargs):
         super(Jung, self).__init__()
         
         self.dim_emb = dim_emb

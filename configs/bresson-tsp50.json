@@ -8,6 +8,7 @@
         "dim_ff": 512,
         "nb_layers_encoder": 6,
         "nb_layers_decoder": 2,
-        "nb_heads": 8
+        "nb_heads": 8,
+        "jit": [true, false]
     }
 }

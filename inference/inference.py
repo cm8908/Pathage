@@ -5,6 +5,7 @@ from inference import MODEL_DICT
 from scipy.spatial import distance_matrix
 from ortools.constraint_solver import pywrapcp, routing_enums_pb2
 from concorde.tsp import TSPSolver
+from web_utils import CustomError
 
 class Inferencer:
     def __init__(self, model_name: str, model_config: dict):
@@ -14,10 +15,14 @@ class Inferencer:
 
         if self.model_type == 'NN':
             self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+            print(self.model_config, file=sys.stderr)
             self.model = MODEL_DICT[model_name]['instance'](**self.model_config).to(self.device)
             model_weights = MODEL_DICT[model_name]['weights'] if 'weights' in MODEL_DICT[model_name] else None
             if model_weights is not None:
                 self.model.load_state_dict(torch.load(model_weights, map_location=self.device))
+            if 'jit' in self.model_config and self.model_config['jit'] == 'true':
+                raise CustomError('Sorry! JIT is not supported yet')
+                self.model = torch.jit.script(self.model)
             self.forward = MODEL_DICT[model_name]['forward']
 
     # TODO: bresson and jung for n=selectable
@@ -30,7 +35,7 @@ class Inferencer:
         elif self.model_type == 'concorde':
             return self.concorde_inference(coordinates)
         else:
-            raise NotImplementedError('Only Neural Networks are supported for now')
+            raise NotImplementedError('Not supported model type')
         
     def concorde_inference(self, coordinates):
         return TSPSolver.from_data(coordinates[:, 0], coordinates[:, 1], norm='GEO').solve().tour.astype(int)
