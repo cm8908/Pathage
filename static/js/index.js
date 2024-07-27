@@ -239,7 +239,7 @@ function createOptionMenu(data) {
             const label = document.createElement('label');
             label.textContent = key + ": ";
             // IF config value is array (selectable)
-            if (Array.isArray(data.config[key]) && data.config[key][0] != null) {
+            if (Array.isArray(data.config[key])) {
                 const select = document.createElement('select');  // TODO: label-select inline display
                 select.id = key;
                 for (const value of data.config[key]) {
@@ -252,46 +252,20 @@ function createOptionMenu(data) {
                 container.appendChild(select);
                 container.appendChild(document.createElement('br'));
             }
-            else if (Array.isArray(data.config[key]) && data.config[key][0] == null) {
-                // IF config value starts with null and is an array (inputtable)
+            else if (typeof data.config[key] == 'object') {
+                // IF config value starts is a dictionary (input)
                 const input = document.createElement('input');
                 input.id = key;
-                input.value = data.config[key][1];
-                input.type = data.config[key][2];
-                input.min = data.config[key][3];
+                input.value = data.config[key].default;
+                input.type = data.config[key].type;
+                if (data.config[key].type == "number" && data.config[key].hasOwnProperty('minimum'))
+                    input.min = data.config[key].minimum;
                 input.required = true;
 
                 container.appendChild(label);
                 container.appendChild(input);
                 container.appendChild(document.createElement('br'));
             }
-            // else if (data.config[key] == null) {
-            //     // IF config value is null (selectable but options needs to be imported from server)
-            //     fetch('/request-config-options', {
-            //         method: 'POST',
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //         },
-            //         body: JSON.stringify({
-            //             model_name: data.model_name,
-            //             config_key : key,
-            //         })
-            //     })
-            //     .then(response => response.json())
-            //     .then(data => {
-            //         const select = document.createElement('select');
-            //         for (const value of data.config_options) {
-            //             alert(value);
-            //             const option = document.createElement('option');
-            //             option.value = value;
-            //             option.text = value;
-            //             select.appendChild(option);
-            //         }
-            //         container.appendChild(label);
-            //         container.appendChild(select);
-            //         container.appendChild(document.createElement('br'));
-            //     })
-            // }
             else {
                 // IF cofig value is a fixed value (not selectable)
                 const value_label = document.createElement('label');
@@ -318,30 +292,41 @@ function deactivateInferenceButton() {
     inferenceBtn.style.opacity = 0.5;
     inferenceBtn.style.pointerEvents = 'none';
 }
+
 function isValidCoordinates() {
+    /**
+     * Check if the coordinates are valid
+     * 1. x and y should have the same length
+     * 2. x and y should not be empty
+     * 3. Model should be selected
+     */
     if (globalCoordinates.x.length == 0 || globalCoordinates.y.length == 0 ||
-        globalCoordinates.x.length != globalCoordinates.y.length) {
+        globalCoordinates.x.length != globalCoordinates.y.length ||
+        document.getElementById('modelSelect').value == ''
+    ) {
         return false;
     }
     return true;
 
 }
 function checkMinCoordinates(data) {
-    let numCoordinates = Math.min(globalCoordinates.x.length,
-                                  globalCoordinates.y.length);
-    var min_coordinates;
-    if ('min_coordinates' in data) {
-        min_coordinates = data.min_coordinates;
-    }
-    else {
-        min_coordinates = 0;
-    }
-    
-    if (numCoordinates >= min_coordinates) {
-        activateInferenceButton();
-    }
-    else {
-        deactivateInferenceButton();
+    if (isValidCoordinates()) {
+        let numCoordinates = Math.min(globalCoordinates.x.length,
+                                    globalCoordinates.y.length);
+        var min_coordinates;
+        if ('min_coordinates' in data) {
+            min_coordinates = data.min_coordinates;
+        }
+        else {
+            min_coordinates = 0;
+        }
+        
+        if (numCoordinates >= min_coordinates) {
+            activateInferenceButton();
+        }
+        else {
+            deactivateInferenceButton();
+        }
     }
 }
 

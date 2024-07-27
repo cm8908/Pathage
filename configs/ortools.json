@@ -29,8 +29,16 @@
             "TABU_SEARCH",
             "GENERIC_TABU_SEARCH"
         ],
-        "time_limit": [null, 60, "number", 0],
+        "time_limit": {
+            "default": 60,
+            "type": "number",
+            "minimum": 0
+        },
         "initial_point": ["zero", "random"],
-        "coordinate_multiplier": [null, 100, "number", 1]
+        "coordinate_multiplier": {
+            "default": 100,
+            "type": "number",
+            "minimum": 1
+        }
     }
 }
