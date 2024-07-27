@@ -188,6 +188,10 @@ async function getConfigFromHTML(model_name) {
             const select = document.getElementById(key);
             data.config[key] = select.value;
         }
+        else if (typeof data.config[key] == 'object') {
+            const input = document.getElementById(key);
+            data.config[key] = input.value;
+        }
     }
     return data;
 }
